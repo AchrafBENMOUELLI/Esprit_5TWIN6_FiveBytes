@@ -30,10 +30,9 @@
                 <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     Dashboard
                 </a>
-                {{-- TODO: Uncomment when admin routes are created --}}
-                {{-- <a href="{{ route('admin.project.index') }}" class="{{ request()->routeIs('admin.project.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.project.index') }}" class="{{ request()->routeIs('admin.project.*') ? 'active' : '' }}">
                     Projets
-                </a> --}}
+                </a>
                 {{-- Les autres modules admin seront ajoutés par vos collègues --}}
                 {{-- <a href="{{ route('admin.infrastructure.index') }}">Infrastructures</a> --}}
                 {{-- <a href="{{ route('admin.incident.index') }}">Incidents</a> --}}
