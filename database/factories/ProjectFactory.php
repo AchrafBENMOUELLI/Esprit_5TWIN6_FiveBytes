@@ -102,7 +102,7 @@ class ProjectFactory extends Factory
             : null;
 
         return [
-            'titre' => fake()->unique()->randomElement(self::$projectTitles) . ' - ' . fake()->city(),
+            'titre' => fake()->randomElement(self::$projectTitles) . ' - ' . fake()->city(),
             'type' => $type,
             'description' => $this->generateDescription($type),
             'budget_prevu' => $budget,
