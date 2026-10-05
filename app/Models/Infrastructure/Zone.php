@@ -30,4 +30,12 @@ class Zone extends Model
     {
         return $this->hasMany(infrastructure::class);
     }
+
+    /**
+     * Get the projects associated with this zone.
+     */
+    public function projects(): HasMany
+    {
+        return $this->hasMany(\App\Models\Project\Project::class, 'zone_id');
+    }
 }

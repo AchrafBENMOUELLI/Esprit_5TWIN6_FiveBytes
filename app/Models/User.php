@@ -48,4 +48,20 @@ class User extends Authenticatable
         'role' => UserRole::class,
     ];
 }
+
+    /**
+     * Get the projects where this user is responsible.
+     */
+    public function responsableProjects()
+    {
+        return $this->hasMany(\App\Models\Project\Project::class, 'responsable_id');
+    }
+
+    /**
+     * Get the fundings where this user is the donor.
+     */
+    public function donations()
+    {
+        return $this->hasMany(\App\Models\Project\Funding::class, 'donateur_id');
+    }
 }

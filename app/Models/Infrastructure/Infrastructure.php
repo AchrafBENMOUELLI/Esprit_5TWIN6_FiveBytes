@@ -41,4 +41,12 @@ class Infrastructure extends Model
     {
         return $this->hasMany(Maintenance::class);
     }
+
+    /**
+     * Get the projects associated with this infrastructure.
+     */
+    public function projects(): HasMany
+    {
+        return $this->hasMany(\App\Models\Project\Project::class, 'infrastructure_id');
+    }
 }
