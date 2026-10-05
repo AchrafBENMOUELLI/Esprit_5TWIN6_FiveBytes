@@ -1,213 +1,317 @@
-@php
-use App\Models\Project\Project;
-@endphp
+@extends('components.project.layouts.admin')
 
-<x-project.layouts.admin 
-    title="Gestion des Projets"
-    :breadcrumbs="[
-        ['label' => 'Tableau de bord', 'url' => route('admin.dashboard')],
-        ['label' => 'Projets', 'url' => null]
-    ]">
+@section('title', 'Gestion des Projets')
 
-    <div class="aq-card">
-        <div class="aq-card-header">
-            <div>
-                <h2 class="aq-card-title">Liste des Projets de Rénovation</h2>
-                <p class="aq-card-subtitle">Gérer et suivre tous les projets de rénovation d'infrastructures</p>
-            </div>
-            <a href="{{ route('admin.projects.create') }}" class="aq-btn aq-btn-primary">
-                <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                </svg>
-                Nouveau Projet
-            </a>
+@section('content')
+<div class="container-fluid py-4">
+    {{-- En-tête --}}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h2 mb-1">Gestion des Projets de Rénovation</h1>
+            <p class="text-muted">Gérer et suivre tous les projets de rénovation d'infrastructures</p>
         </div>
+        <a href="{{ route('admin.projects.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>
+            Nouveau Projet
+        </a>
+    </div>
 
-        {{-- Filtres --}}
-        <div class="aq-filters">
-            <form method="GET" action="{{ route('admin.projects.index') }}" class="aq-filters-form">
-                <div class="aq-form-row">
-                    <div class="aq-form-group">
-                        <input type="text" name="search" class="aq-form-control" 
-                               placeholder="Rechercher un projet..." 
-                               value="{{ request('search') }}">
-                    </div>
-                    
-                    <div class="aq-form-group">
-                        <select name="statut" class="aq-form-control">
-                            <option value="">Tous les statuts</option>
-                            <option value="planifié" {{ request('statut') === 'planifié' ? 'selected' : '' }}>Planifié</option>
-                            <option value="en_cours" {{ request('statut') === 'en_cours' ? 'selected' : '' }}>En cours</option>
-                            <option value="terminé" {{ request('statut') === 'terminé' ? 'selected' : '' }}>Terminé</option>
-                            <option value="suspendu" {{ request('statut') === 'suspendu' ? 'selected' : '' }}>Suspendu</option>
-                            <option value="annulé" {{ request('statut') === 'annulé' ? 'selected' : '' }}>Annulé</option>
-                        </select>
-                    </div>
+    {{-- Messages Flash --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
-                    <div class="aq-form-group">
-                        <select name="type" class="aq-form-control">
-                            <option value="">Tous les types</option>
-                            <option value="réparation" {{ request('type') === 'réparation' ? 'selected' : '' }}>Réparation</option>
-                            <option value="modernisation" {{ request('type') === 'modernisation' ? 'selected' : '' }}>Modernisation</option>
-                            <option value="extension" {{ request('type') === 'extension' ? 'selected' : '' }}>Extension</option>
-                            <option value="construction" {{ request('type') === 'construction' ? 'selected' : '' }}>Construction</option>
-                        </select>
-                    </div>
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
-                    <button type="submit" class="aq-btn aq-btn-secondary">
+    {{-- Filtres --}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ route('admin.projects.index') }}" class="row g-3">
+                <div class="col-md-3">
+                    <label for="search" class="form-label">Recherche</label>
+                    <input type="text" class="form-control" id="search" name="search" 
+                           placeholder="Titre du projet..." 
+                           value="{{ request('search') }}">
+                </div>
+
+                <div class="col-md-2">
+                    <label for="type" class="form-label">Type</label>
+                    <select class="form-select" id="type" name="type">
+                        <option value="">Tous les types</option>
+                        <option value="réparation" {{ request('type') === 'réparation' ? 'selected' : '' }}>Réparation</option>
+                        <option value="modernisation" {{ request('type') === 'modernisation' ? 'selected' : '' }}>Modernisation</option>
+                        <option value="extension" {{ request('type') === 'extension' ? 'selected' : '' }}>Extension</option>
+                        <option value="construction" {{ request('type') === 'construction' ? 'selected' : '' }}>Construction</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="statut" class="form-label">Statut</label>
+                    <select class="form-select" id="statut" name="statut">
+                        <option value="">Tous les statuts</option>
+                        <option value="planifié" {{ request('statut') === 'planifié' ? 'selected' : '' }}>Planifié</option>
+                        <option value="en_cours" {{ request('statut') === 'en_cours' ? 'selected' : '' }}>En cours</option>
+                        <option value="terminé" {{ request('statut') === 'terminé' ? 'selected' : '' }}>Terminé</option>
+                        <option value="suspendu" {{ request('statut') === 'suspendu' ? 'selected' : '' }}>Suspendu</option>
+                        <option value="annulé" {{ request('statut') === 'annulé' ? 'selected' : '' }}>Annulé</option>
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="zone_id" class="form-label">Zone</label>
+                    <select class="form-select" id="zone_id" name="zone_id">
+                        <option value="">Toutes les zones</option>
+                        @foreach(\App\Models\Infrastructure\Zone::all() as $zone)
+                            <option value="{{ $zone->id }}" {{ request('zone_id') == $zone->id ? 'selected' : '' }}>
+                                {{ $zone->nom }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-md-3 d-flex align-items-end gap-2">
+                    <button type="submit" class="btn btn-secondary">
+                        <i class="fas fa-search me-1"></i>
                         Filtrer
                     </button>
-                    
-                    @if(request()->hasAny(['search', 'statut', 'type']))
-                        <a href="{{ route('admin.projects.index') }}" class="aq-btn aq-btn-outline">
+                    @if(request()->hasAny(['search', 'type', 'statut', 'zone_id']))
+                        <a href="{{ route('admin.projects.index') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-redo me-1"></i>
                             Réinitialiser
                         </a>
                     @endif
                 </div>
             </form>
         </div>
-
-        {{-- Statistiques rapides --}}
-        <div class="aq-grid-4" style="margin-bottom: 2rem;">
-            <div class="aq-stat-card">
-                <div class="aq-stat-label">Total Projets</div>
-                <div class="aq-stat-value">{{ $projects->total() }}</div>
-            </div>
-            <div class="aq-stat-card">
-                <div class="aq-stat-label">En cours</div>
-                <div class="aq-stat-value">{{ $projects->where('statut', 'en_cours')->count() }}</div>
-            </div>
-            <div class="aq-stat-card">
-                <div class="aq-stat-label">Budget Total</div>
-                <div class="aq-stat-value">{{ number_format($projects->sum('budget_prevu'), 0, ',', ' ') }} €</div>
-            </div>
-            <div class="aq-stat-card">
-                <div class="aq-stat-label">Terminés</div>
-                <div class="aq-stat-value">{{ $projects->where('statut', 'terminé')->count() }}</div>
-            </div>
-        </div>
-
-        {{-- Table --}}
-        <div class="aq-table-responsive">
-            <table class="aq-table">
-                <thead>
-                    <tr>
-                        <th>Projet</th>
-                        <th>Type</th>
-                        <th>Zone / Infrastructure</th>
-                        <th>Budget</th>
-                        <th>Dates</th>
-                        <th>Statut</th>
-                        <th>Avancement</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($projects as $project)
-                        <tr>
-                            <td>
-                                <div class="aq-table-title">{{ $project->titre }}</div>
-                                <div class="aq-table-subtitle">Responsable: {{ $project->responsable->name ?? 'Non assigné' }}</div>
-                            </td>
-                            <td>
-                                <span class="aq-badge aq-badge-info">{{ ucfirst($project->type) }}</span>
-                            </td>
-                            <td>
-                                <div class="aq-table-subtitle">
-                                    {{ $project->zone->nom ?? 'N/A' }}<br>
-                                    <small>{{ $project->infrastructure->nom ?? 'N/A' }}</small>
-                                </div>
-                            </td>
-                            <td>
-                                <strong>{{ number_format($project->budget_prevu, 0, ',', ' ') }} €</strong>
-                                @if($project->fundings->count() > 0)
-                                    <div class="aq-table-subtitle">
-                                        Financé: {{ number_format($project->fundingTotal(), 0, ',', ' ') }} €
-                                    </div>
-                                @endif
-                            </td>
-                            <td>
-                                <div class="aq-table-subtitle">
-                                    {{ \Carbon\Carbon::parse($project->date_debut)->format('d/m/Y') }}<br>
-                                    <small>→ {{ \Carbon\Carbon::parse($project->date_fin_prevue)->format('d/m/Y') }}</small>
-                                </div>
-                            </td>
-                            <td>
-                                @php
-                                    $badgeClass = match($project->statut) {
-                                        'planifié' => 'aq-badge-secondary',
-                                        'en_cours' => 'aq-badge-primary',
-                                        'terminé' => 'aq-badge-success',
-                                        'suspendu' => 'aq-badge-warning',
-                                        'annulé' => 'aq-badge-danger',
-                                        default => 'aq-badge-secondary'
-                                    };
-                                @endphp
-                                <span class="aq-badge {{ $badgeClass }}">
-                                    {{ ucfirst(str_replace('_', ' ', $project->statut)) }}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="aq-progress">
-                                    <div class="aq-progress-bar" style="width: {{ $project->avancement_pourcentage }}%"></div>
-                                </div>
-                                <div class="aq-table-subtitle">{{ $project->avancement_pourcentage }}%</div>
-                            </td>
-                            <td>
-                                <div class="aq-actions">
-                                    <a href="{{ route('admin.projects.show', $project) }}" 
-                                       class="aq-btn-icon" 
-                                       title="Voir les détails">
-                                        <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                        </svg>
-                                    </a>
-                                    <a href="{{ route('admin.projects.edit', $project) }}" 
-                                       class="aq-btn-icon" 
-                                       title="Modifier">
-                                        <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                        </svg>
-                                    </a>
-                                    <form action="{{ route('admin.projects.destroy', $project) }}" 
-                                          method="POST" 
-                                          style="display: inline;"
-                                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce projet ?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="aq-btn-icon aq-btn-danger" title="Supprimer">
-                                            <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                            </svg>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="8" class="aq-table-empty">
-                                <svg class="aq-icon" style="width: 48px; height: 48px; margin-bottom: 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                                </svg>
-                                <p>Aucun projet trouvé.</p>
-                                <a href="{{ route('admin.projects.create') }}" class="aq-btn aq-btn-primary" style="margin-top: 1rem;">
-                                    Créer le premier projet
-                                </a>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-
-        {{-- Pagination --}}
-        @if($projects->hasPages())
-            <div class="aq-pagination">
-                {{ $projects->links() }}
-            </div>
-        @endif
     </div>
 
-</x-project.layouts.admin>
+    {{-- Statistiques rapides --}}
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="rounded-circle bg-primary bg-opacity-10 p-3">
+                                <i class="fas fa-project-diagram fa-2x text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">Total Projets</h6>
+                            <h3 class="mb-0">{{ $projects->total() }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="rounded-circle bg-info bg-opacity-10 p-3">
+                                <i class="fas fa-spinner fa-2x text-info"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">En cours</h6>
+                            <h3 class="mb-0">{{ $projects->where('statut', 'en_cours')->count() }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="rounded-circle bg-success bg-opacity-10 p-3">
+                                <i class="fas fa-check-circle fa-2x text-success"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">Terminés</h6>
+                            <h3 class="mb-0">{{ $projects->where('statut', 'terminé')->count() }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="rounded-circle bg-warning bg-opacity-10 p-3">
+                                <i class="fas fa-euro-sign fa-2x text-warning"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="text-muted mb-1">Budget Total</h6>
+                            <h3 class="mb-0">{{ number_format($projects->sum('budget_prevu') / 1000000, 1) }}M €</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- Table des projets --}}
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Projet</th>
+                            <th>Type</th>
+                            <th>Zone / Infrastructure</th>
+                            <th>Budget</th>
+                            <th>Dates</th>
+                            <th>Statut</th>
+                            <th>Avancement</th>
+                            <th class="text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($projects as $project)
+                            <tr>
+                                <td>
+                                    <strong class="d-block">{{ $project->titre }}</strong>
+                                    <small class="text-muted">
+                                        <i class="fas fa-user-tie me-1"></i>
+                                        {{ $project->responsable->name ?? 'Non assigné' }}
+                                    </small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ ucfirst($project->type) }}</span>
+                                </td>
+                                <td>
+                                    <div class="small">
+                                        <div><i class="fas fa-map-marker-alt me-1 text-primary"></i>{{ $project->zone->nom ?? 'N/A' }}</div>
+                                        <div class="text-muted"><i class="fas fa-building me-1"></i>{{ $project->infrastructure->nom ?? 'N/A' }}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <strong>{{ number_format($project->budget_prevu, 0, ',', ' ') }} €</strong>
+                                    @if($project->fundings->count() > 0)
+                                        <div class="small text-success">
+                                            <i class="fas fa-check me-1"></i>
+                                            {{ number_format($project->fundingTotal(), 0, ',', ' ') }} € financé
+                                        </div>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="small">
+                                        <div>{{ \Carbon\Carbon::parse($project->date_debut)->format('d/m/Y') }}</div>
+                                        <div class="text-muted">→ {{ \Carbon\Carbon::parse($project->date_fin_prevue)->format('d/m/Y') }}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @php
+                                        $badgeClass = match($project->statut) {
+                                            'planifié' => 'secondary',
+                                            'en_cours' => 'primary',
+                                            'terminé' => 'success',
+                                            'suspendu' => 'warning',
+                                            'annulé' => 'danger',
+                                            default => 'secondary'
+                                        };
+                                    @endphp
+                                    <span class="badge bg-{{ $badgeClass }}">
+                                        {{ ucfirst(str_replace('_', ' ', $project->statut)) }}
+                                    </span>
+                                </td>
+                                <td style="min-width: 120px;">
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-primary" role="progressbar" 
+                                             style="width: {{ $project->avancement_pourcentage }}%"
+                                             aria-valuenow="{{ $project->avancement_pourcentage }}" 
+                                             aria-valuemin="0" aria-valuemax="100">
+                                            {{ $project->avancement_pourcentage }}%
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-end">
+                                    <div class="btn-group" role="group">
+                                        <a href="{{ route('admin.projects.show', $project) }}" 
+                                           class="btn btn-sm btn-outline-primary" 
+                                           title="Voir les détails">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ route('admin.projects.edit', $project) }}" 
+                                           class="btn btn-sm btn-outline-secondary" 
+                                           title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="{{ route('admin.projects.destroy', $project) }}" 
+                                              method="POST" 
+                                              style="display: inline;"
+                                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce projet ?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="8" class="text-center py-5">
+                                    <i class="fas fa-folder-open fa-3x text-muted mb-3"></i>
+                                    <p class="text-muted mb-3">Aucun projet trouvé.</p>
+                                    <a href="{{ route('admin.projects.create') }}" class="btn btn-primary">
+                                        <i class="fas fa-plus me-2"></i>
+                                        Créer le premier projet
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+
+            {{-- Pagination --}}
+            @if($projects->hasPages())
+                <div class="mt-4 d-flex justify-content-center">
+                    {{ $projects->links('pagination::bootstrap-5') }}
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+@endsection
+
+@push('styles')
+<style>
+    .card {
+        transition: transform 0.2s;
+    }
+    .card:hover {
+        transform: translateY(-2px);
+    }
+    .progress {
+        border-radius: 10px;
+    }
+    .progress-bar {
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+</style>
+@endpush
