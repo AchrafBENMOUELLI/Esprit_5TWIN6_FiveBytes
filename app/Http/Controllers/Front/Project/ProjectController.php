@@ -11,11 +11,12 @@ class ProjectController extends Controller
 {
     /**
      * Display a listing of projects for citizens.
+     * Affiche uniquement les projets non annulés avec transparence budgétaire.
      */
     public function index(Request $request)
     {
         $query = Project::with(['zone', 'infrastructure', 'responsable'])
-            ->whereNotIn('statut', ['annulé']); // Ne pas afficher les projets annulés
+            ->where('statut', '!=', 'annulé'); // Ne pas afficher les projets annulés
         
         // Filtres
         if ($request->filled('zone_id')) {
@@ -38,28 +39,31 @@ class ProjectController extends Controller
 
     /**
      * Display the specified project.
+     * Affiche les détails publics avec transparence budgétaire (sans infos sensibles).
      */
     public function show(Project $project)
     {
+        // Vérifier que le projet n'est pas annulé
+        if ($project->statut === 'annulé') {
+            abort(404, 'Ce projet n\'est pas disponible.');
+        }
+
         $project->load([
             'zone',
             'infrastructure',
             'responsable',
             'projectPhases.contractor',
-            'fundings.donateur',
-            'projectDocuments'
+            'fundings' => function ($query) {
+                // Charger uniquement les financements approuvés pour le public
+                $query->where('statut', 'approuve');
+            },
+            'projectDocuments' => function ($query) {
+                // Charger uniquement les documents publics (exclure les documents sensibles si nécessaire)
+                // Pour l'instant, on affiche tous les documents
+                $query->orderBy('created_at', 'desc');
+            }
         ]);
         
-        // Calculer les totaux
-        $budgetTotal = $project->budgetTotal();
-        $fundingTotal = $project->fundingTotal();
-        $budgetRemaining = $project->budgetRemaining();
-        
-        return view('components.project.front.show', compact(
-            'project',
-            'budgetTotal',
-            'fundingTotal',
-            'budgetRemaining'
-        ));
+        return view('components.project.front.show', compact('project'));
     }
 }
