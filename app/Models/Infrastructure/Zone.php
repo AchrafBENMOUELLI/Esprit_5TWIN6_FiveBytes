@@ -28,6 +28,6 @@ class Zone extends Model
 
     public function infrastructures(): HasMany
     {
-        return $this->hasMany(infrastructure::class);
+        return $this->hasMany(Infrastructure::class);
     }
 }

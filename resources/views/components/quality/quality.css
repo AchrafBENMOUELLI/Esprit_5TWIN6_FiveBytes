@@ -1,0 +1,347 @@
+/* Quality Module Styles */
+
+.quality-module {
+    padding: 0;
+}
+
+.quality-header {
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.quality-title h2 {
+    color: #0b2545;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.quality-title p {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 0;
+}
+
+.quality-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Statistiques */
+.quality-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    border-left: 4px solid;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.stat-card.total {
+    border-color: #0d6efd;
+}
+
+.stat-card.conforme {
+    border-color: #198754;
+}
+
+.stat-card.non-conforme {
+    border-color: #dc3545;
+}
+
+.stat-card.taux {
+    border-color: #6610f2;
+}
+
+.stat-card .stat-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.stat-card .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.stat-card.total .stat-value {
+    color: #0d6efd;
+}
+
+.stat-card.conforme .stat-value {
+    color: #198754;
+}
+
+.stat-card.non-conforme .stat-value {
+    color: #dc3545;
+}
+
+.stat-card.taux .stat-value {
+    color: #6610f2;
+}
+
+/* Tableau */
+.quality-table-container {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.quality-table {
+    margin-bottom: 0;
+}
+
+.quality-table thead th {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    color: #495057;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 16px;
+}
+
+.quality-table tbody td {
+    padding: 16px;
+    vertical-align: middle;
+}
+
+/* Badges de statut */
+.badge-conforme {
+    display: inline-block;
+    background-color: #d1e7dd;
+    color: #0f5132;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.badge-non-conforme {
+    display: inline-block;
+    background-color: #f8d7da;
+    color: #842029;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.badge-alertes {
+    display: inline-block;
+    background-color: #fff3cd;
+    color: #664d03;
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+/* Actions - Override Bootstrap button styles for icon-only buttons */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.action-btn {
+    padding: 6px 10px !important;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.action-btn i {
+    font-size: 1rem;
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-state i {
+    font-size: 5rem;
+    color: #dee2e6;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.empty-state h3 {
+    color: #6c757d;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+}
+
+.empty-state p {
+    color: #adb5bd;
+    font-size: 0.95rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .quality-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .quality-actions {
+        width: 100%;
+    }
+    
+    .quality-actions .btn {
+        flex: 1;
+    }
+
+    .quality-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .quality-table-container {
+        overflow-x: auto;
+    }
+}
+
+/* Modal specific styles */
+.modal-xl {
+    max-width: 1200px;
+}
+
+.modal-header.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+/* Remove old parameter-row styles since we're using Bootstrap cards now */
+.parameter-item {
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+}
+
+.parameter-item.exceeded {
+    background-color: #fff5f5;
+    border-color: #dc3545;
+}
+
+.parameter-item.normal {
+    background-color: #f8f9fa;
+}
+
+.parameter-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.parameter-value.exceeded {
+    color: #dc3545;
+}
+
+.alert-item {
+    padding: 12px;
+    border-left: 4px solid;
+    border-radius: 4px;
+}
+
+.alert-item.critique {
+    background-color: #fff5f5;
+    border-color: #dc3545;
+}
+
+.alert-item.eleve {
+    background-color: #fff8f0;
+    border-color: #fd7e14;
+}
+
+.alert-item.moyen {
+    background-color: #fffbf0;
+    border-color: #ffc107;
+}
+
+.alert-item.faible {
+    background-color: #f0f8ff;
+    border-color: #0d6efd;
+}
+
+.info-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.info-item {
+    margin-bottom: 12px;
+}
+
+.info-label {
+    font-size: 0.75rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.info-value {
+    color: #0b2545;
+    font-weight: 600;
+}
+
+/* Card hover effects */
+.card {
+    transition: box-shadow 0.2s;
+}
+
+.card:hover {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+
+/* Skeleton Loading Styles */
+.skeleton {
+    animation: skeleton-loading 1s linear infinite alternate;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.skeleton-text {
+    height: 16px;
+    border-radius: 4px;
+}
+
+.skeleton-container {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

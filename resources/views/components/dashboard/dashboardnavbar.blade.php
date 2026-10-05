@@ -1,4 +1,3 @@
-<link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
 <style>
     {!! file_get_contents(resource_path('views/base.css')) !!}
     {!! file_get_contents(resource_path('views/components/dashboard/dashboardnavbar.css')) !!}

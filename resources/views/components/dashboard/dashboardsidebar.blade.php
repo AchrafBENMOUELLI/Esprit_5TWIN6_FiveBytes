@@ -11,7 +11,7 @@
         <p class="aq-sidebar-label">Modules</p>
         <a href="{{ route('dashboard', ['module' => 'infrastructure']) }}" class="{{ request('module') === 'infrastructure' ? 'active' : '' }}">Infrastructure</a>
         <a href="{{ route('dashboard', ['module' => 'incident']) }}" class="{{ request('module') === 'incident' ? 'active' : '' }}">Incidents</a>
-        <a href="{{ route('dashboard', ['module' => 'quality']) }}" class="{{ request('module') === 'quality' ? 'active' : '' }}">Qualité de l'eau</a>
+        <a href="{{ route('admin.quality.samples.index') }}" class="{{ request()->routeIs('admin.quality.*') ? 'active' : '' }}">Qualité de l'eau</a>
         <a href="{{ route('dashboard', ['module' => 'drought']) }}" class="{{ request('module') === 'drought' ? 'active' : '' }}">Sécheresse</a>
         <a href="{{ route('dashboard', ['module' => 'project']) }}" class="{{ request('module') === 'project' ? 'active' : '' }}">Projets</a>
 

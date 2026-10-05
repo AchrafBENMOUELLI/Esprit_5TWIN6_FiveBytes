@@ -18,7 +18,12 @@ Route::get('/dashboard', function (Request $request) {
         return redirect('/');
     }
 
-    return view('components.dashboard.dashboard');
+    $module = $request->query('module');
+    
+    return view('dashboard', [
+        'module' => $module,
+    ]);
 })->middleware('auth')->name('dashboard');
 
 require __DIR__.'/auth.php';
+require __DIR__.'/admin.php';
