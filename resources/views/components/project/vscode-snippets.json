@@ -1,0 +1,253 @@
+{
+  "Project Card": {
+    "prefix": "aq-project-card",
+    "body": [
+      "<div class=\"project-card\">",
+      "    <div class=\"project-card-header\">",
+      "        <div class=\"project-card-icon\">",
+      "            <i class=\"fas fa-${1:tools}\"></i>",
+      "        </div>",
+      "        <div class=\"project-card-title\">",
+      "            <h3>${2:Titre du Projet}</h3>",
+      "        </div>",
+      "    </div>",
+      "    ",
+      "    <div class=\"project-card-body\">",
+      "        <p class=\"project-card-description\">",
+      "            ${3:Description du projet...}",
+      "        </p>",
+      "        ",
+      "        <div class=\"project-card-meta\">",
+      "            <div class=\"project-meta-item\">",
+      "                <i class=\"fas fa-calendar\"></i>",
+      "                <span class=\"project-meta-label\">Date:</span>",
+      "                <span class=\"project-meta-value\">${4:01/01/2024}</span>",
+      "            </div>",
+      "        </div>",
+      "    </div>",
+      "    ",
+      "    <div class=\"project-card-footer\">",
+      "        $0",
+      "    </div>",
+      "</div>"
+    ],
+    "description": "Create a complete project card component"
+  },
+  
+  "Status Badge": {
+    "prefix": "aq-badge-status",
+    "body": [
+      "<span class=\"badge-status ${1|planifie,en-cours,termine,suspendu,annule|}\">",
+      "    <i class=\"fas fa-circle\"></i>",
+      "    ${2:Status}",
+      "</span>"
+    ],
+    "description": "Create a status badge"
+  },
+  
+  "Priority Badge": {
+    "prefix": "aq-badge-priority",
+    "body": [
+      "<span class=\"badge-priority ${1|haute,moyenne,basse|}\">${2:Priority}</span>"
+    ],
+    "description": "Create a priority badge"
+  },
+  
+  "Progress Bar": {
+    "prefix": "aq-progress-bar",
+    "body": [
+      "<div class=\"progress-wrapper\">",
+      "    <div class=\"progress-header\">",
+      "        <span class=\"progress-label\">${1:Label}</span>",
+      "        <span class=\"progress-percentage\">${2:75}%</span>",
+      "    </div>",
+      "    ",
+      "    <div class=\"progress-bar-custom${3| ,small,large|}\">",
+      "        <div class=\"progress-bar-fill${4| ,success,warning,danger|}\" style=\"width: ${2:75}%\">",
+      "            <span class=\"progress-bar-text\">${2:75}%</span>",
+      "        </div>",
+      "    </div>",
+      "</div>"
+    ],
+    "description": "Create a custom progress bar"
+  },
+  
+  "Timeline": {
+    "prefix": "aq-timeline",
+    "body": [
+      "<div class=\"timeline\">",
+      "    <div class=\"timeline-item\">",
+      "        <div class=\"timeline-marker${1| ,success,warning,danger,muted|}\"></div>",
+      "        <div class=\"timeline-content\">",
+      "            <div class=\"timeline-header\">",
+      "                <h6 class=\"timeline-title\">${2:Event Title}</h6>",
+      "                <span class=\"timeline-date\">${3:01/01/2024}</span>",
+      "            </div>",
+      "            <p class=\"timeline-description\">",
+      "                ${4:Event description...}",
+      "            </p>",
+      "        </div>",
+      "    </div>",
+      "    $0",
+      "</div>"
+    ],
+    "description": "Create a timeline with items"
+  },
+  
+  "Timeline Item": {
+    "prefix": "aq-timeline-item",
+    "body": [
+      "<div class=\"timeline-item\">",
+      "    <div class=\"timeline-marker${1| ,success,warning,danger,muted|}\"></div>",
+      "    <div class=\"timeline-content\">",
+      "        <div class=\"timeline-header\">",
+      "            <h6 class=\"timeline-title\">${2:Event Title}</h6>",
+      "            <span class=\"timeline-date\">${3:01/01/2024}</span>",
+      "        </div>",
+      "        <p class=\"timeline-description\">",
+      "            ${4:Event description...}",
+      "        </p>",
+      "    </div>",
+      "</div>"
+    ],
+    "description": "Create a single timeline item"
+  },
+  
+  "Budget Chart": {
+    "prefix": "aq-budget-chart",
+    "body": [
+      "<div class=\"budget-chart\">",
+      "    <div class=\"budget-chart-header\">",
+      "        <h5 class=\"budget-chart-title\">",
+      "            <i class=\"fas fa-chart-pie\"></i>",
+      "            ${1:Budget Title}",
+      "        </h5>",
+      "        <p class=\"budget-chart-subtitle\">",
+      "            ${2:Subtitle}",
+      "        </p>",
+      "    </div>",
+      "    ",
+      "    <div class=\"budget-row\">",
+      "        <div class=\"budget-row-header\">",
+      "            <span class=\"budget-row-label\">",
+      "                <i class=\"fas fa-wallet\"></i>",
+      "                ${3:Label}",
+      "            </span>",
+      "            <span class=\"budget-row-amount\">",
+      "                ${4:50,000}",
+      "                <span class=\"currency\">TND</span>",
+      "            </span>",
+      "        </div>",
+      "        ",
+      "        <div class=\"budget-bar\">",
+      "            <div class=\"budget-bar-segment ${5|prevu,recu,restant|}\" style=\"width: ${6:100}%\">",
+      "                <span class=\"budget-bar-segment-text\">${4:50,000} TND</span>",
+      "            </div>",
+      "        </div>",
+      "    </div>",
+      "    $0",
+      "</div>"
+    ],
+    "description": "Create a budget chart"
+  },
+  
+  "Budget Stats Grid": {
+    "prefix": "aq-budget-stats",
+    "body": [
+      "<div class=\"budget-stats\">",
+      "    <div class=\"budget-stat-card\">",
+      "        <div class=\"budget-stat-label\">${1:Label}</div>",
+      "        <div class=\"budget-stat-value${2| ,success,warning,danger|}\">",
+      "            ${3:50,000}",
+      "            <span class=\"budget-stat-currency\">TND</span>",
+      "        </div>",
+      "    </div>",
+      "    $0",
+      "</div>"
+    ],
+    "description": "Create a budget statistics grid"
+  },
+  
+  "Action Button": {
+    "prefix": "aq-btn",
+    "body": [
+      "<button class=\"btn-project ${1|primary,success,warning,danger,outline,ghost|}${2| ,small,large,icon-only|}\">",
+      "    <i class=\"fas fa-${3:check}\"></i>",
+      "    ${4:Button Text}",
+      "</button>"
+    ],
+    "description": "Create an action button"
+  },
+  
+  "Empty State": {
+    "prefix": "aq-empty-state",
+    "body": [
+      "<div class=\"empty-state\">",
+      "    <div class=\"empty-state-icon\">",
+      "        <i class=\"fas fa-${1:inbox}\"></i>",
+      "    </div>",
+      "    <h3 class=\"empty-state-title\">${2:No items found}</h3>",
+      "    <p class=\"empty-state-description\">",
+      "        ${3:Description text...}",
+      "    </p>",
+      "    <button class=\"btn-project primary\">",
+      "        <i class=\"fas fa-plus\"></i>",
+      "        ${4:Create New}",
+      "    </button>",
+      "</div>"
+    ],
+    "description": "Create an empty state component"
+  },
+  
+  "Card Meta Item": {
+    "prefix": "aq-meta-item",
+    "body": [
+      "<div class=\"project-meta-item\">",
+      "    <i class=\"fas fa-${1:calendar}\"></i>",
+      "    <span class=\"project-meta-label\">${2:Label}:</span>",
+      "    <span class=\"project-meta-value\">${3:Value}</span>",
+      "</div>"
+    ],
+    "description": "Create a project meta item"
+  },
+  
+  "Divider": {
+    "prefix": "aq-divider",
+    "body": [
+      "<div class=\"divider${1| ,-gradient|}\"></div>"
+    ],
+    "description": "Create a divider line"
+  },
+  
+  "Loading Skeleton": {
+    "prefix": "aq-skeleton",
+    "body": [
+      "<div class=\"loading-skeleton\" style=\"height: ${1:100}px; width: ${2:100}%;\"></div>"
+    ],
+    "description": "Create a loading skeleton"
+  },
+  
+  "Hover Effect": {
+    "prefix": "aq-hover",
+    "body": [
+      "class=\"hover-${1|lift,scale,glow|}\""
+    ],
+    "description": "Add hover effect class"
+  },
+  
+  "Text Color": {
+    "prefix": "aq-text-color",
+    "body": [
+      "class=\"text-${1|navy,ocean,aqua,success,warning,danger,muted|}\""
+    ],
+    "description": "Add text color class"
+  },
+  
+  "Background Gradient": {
+    "prefix": "aq-bg-gradient",
+    "body": [
+      "class=\"bg-gradient-${1|primary,aqua,success|}\""
+    ],
+    "description": "Add background gradient class"
+  }
+}

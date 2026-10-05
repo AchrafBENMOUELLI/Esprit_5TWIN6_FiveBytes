@@ -15,6 +15,7 @@
         {!! file_get_contents(resource_path('views/components/dashboard/dashboardsidebar.css')) !!}
         {!! file_get_contents(resource_path('views/components/dashboard/dashboardnavbar.css')) !!}
         {!! file_get_contents(resource_path('views/components/project/layouts/admin.css')) !!}
+        {!! file_get_contents(resource_path('views/components/project/project.css')) !!}
     </style>
     
     {{-- Styles personnalisés de la page --}}

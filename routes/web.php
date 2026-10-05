@@ -24,3 +24,10 @@ Route::get('/dashboard', function (Request $request) {
 require __DIR__.'/auth.php';
 require __DIR__.'/front/project.php';
 require __DIR__.'/admin.php';
+
+// CSS Demo (Development only - Remove in production)
+if (app()->environment('local')) {
+    Route::get('/project-css-demo', function () {
+        return view('components.project.css-demo');
+    })->name('project.css.demo');
+}

@@ -13,6 +13,7 @@
     <style>
         {!! file_get_contents(resource_path('views/base.css')) !!}
         {!! file_get_contents(resource_path('views/components/project/layouts/front.css')) !!}
+        {!! file_get_contents(resource_path('views/components/project/project.css')) !!}
     </style>
     
     {{-- Styles personnalisés de la page --}}
