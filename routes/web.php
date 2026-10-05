@@ -14,10 +14,12 @@ Route::get('/register', fn () => view('components.authentification.registercompo
     ->name('register');
 
 Route::get('/dashboard', function (Request $request) {
+    // Si c'est un citoyen, rediriger vers la page d'accueil front-office
     if ($request->user()->role === UserRole::Citoyen) {
-        return redirect('/');
+        return redirect()->route('front.home');
     }
 
+    // Sinon, afficher le dashboard admin/gestionnaire
     return view('components.dashboard.dashboard');
 })->middleware('auth')->name('dashboard');
 

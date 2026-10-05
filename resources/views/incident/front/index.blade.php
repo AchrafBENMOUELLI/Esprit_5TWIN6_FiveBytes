@@ -1,4 +1,4 @@
-<x-layouts.admin>
+<x-layouts.front>
     <x-slot name="title">Mes incidents</x-slot>
 
     <div class="space-y-6">
@@ -255,4 +255,4 @@
             </div>
         </div>
     </div>
-</x-layouts.admin>
+</x-layouts.front>

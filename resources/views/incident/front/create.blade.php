@@ -1,4 +1,4 @@
-<x-layouts.admin>
+<x-layouts.front>
     <x-slot name="title">Signaler un incident</x-slot>
 
     <div class="space-y-6">

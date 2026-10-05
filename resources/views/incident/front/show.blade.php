@@ -1,4 +1,4 @@
-<x-layouts.admin>
+<x-layouts.front>
     <x-slot name="title">Mon incident {{ $incident->reference }}</x-slot>
 
     <div class="space-y-6">
