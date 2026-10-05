@@ -1,0 +1,382 @@
+/* Layout Admin - Module Projets */
+
+.aq-admin-main {
+    margin-left: 240px;
+    padding: 88px 24px 24px;
+    min-height: 100vh;
+    background: var(--bg);
+}
+
+/* Fil d'Ariane (Breadcrumb) */
+.aq-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 24px;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.aq-breadcrumb a {
+    color: var(--ocean);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.aq-breadcrumb a:hover {
+    color: var(--navy);
+    text-decoration: underline;
+}
+
+.aq-breadcrumb-separator {
+    color: var(--border);
+    font-weight: 300;
+}
+
+.aq-breadcrumb-current {
+    color: var(--text);
+    font-weight: 500;
+}
+
+/* En-tête de page */
+.aq-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--border);
+}
+
+.aq-page-header-content {
+    flex: 1;
+}
+
+.aq-page-title {
+    color: var(--navy);
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+.aq-page-description {
+    color: var(--muted);
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.aq-page-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Messages d'alerte */
+.aq-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border-left: 4px solid;
+    position: relative;
+}
+
+.aq-alert-success {
+    background: #f0fdf4;
+    border-left-color: var(--success);
+    color: #166534;
+}
+
+.aq-alert-error {
+    background: #fef2f2;
+    border-left-color: var(--danger);
+    color: #991b1b;
+}
+
+.aq-alert-warning {
+    background: #fffbeb;
+    border-left-color: var(--warning);
+    color: #92400e;
+}
+
+.aq-alert-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.aq-alert-content {
+    flex: 1;
+}
+
+.aq-alert-content strong {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.aq-alert-content p {
+    margin: 0;
+}
+
+.aq-alert-close {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: currentColor;
+    opacity: 0.5;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: opacity 0.2s, background 0.2s;
+}
+
+.aq-alert-close:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Contenu de la page */
+.aq-page-content {
+    /* Le contenu est libre de définir son propre style */
+}
+
+/* Cartes */
+.aq-card {
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 24px;
+}
+
+.aq-card-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.aq-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--navy);
+    margin: 0;
+}
+
+.aq-card-body {
+    padding: 24px;
+}
+
+.aq-card-footer {
+    padding: 16px 24px;
+    background: #f9fafb;
+    border-top: 1px solid var(--border);
+}
+
+/* Boutons */
+.aq-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    line-height: 1.5;
+}
+
+.aq-btn-primary {
+    background: var(--ocean);
+    color: var(--white);
+}
+
+.aq-btn-primary:hover {
+    background: var(--navy);
+    color: var(--white);
+}
+
+.aq-btn-success {
+    background: var(--success);
+    color: var(--white);
+}
+
+.aq-btn-success:hover {
+    background: #25804b;
+    color: var(--white);
+}
+
+.aq-btn-danger {
+    background: var(--danger);
+    color: var(--white);
+}
+
+.aq-btn-danger:hover {
+    background: #b91c1c;
+    color: var(--white);
+}
+
+.aq-btn-secondary {
+    background: #e5e7eb;
+    color: var(--text);
+}
+
+.aq-btn-secondary:hover {
+    background: #d1d5db;
+    color: var(--text);
+}
+
+.aq-btn-sm {
+    padding: 6px 14px;
+    font-size: 0.875rem;
+}
+
+.aq-btn-lg {
+    padding: 12px 28px;
+    font-size: 1.05rem;
+}
+
+/* Tableaux */
+.aq-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.aq-table thead {
+    background: #f9fafb;
+}
+
+.aq-table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--navy);
+    border-bottom: 2px solid var(--border);
+    font-size: 0.9rem;
+}
+
+.aq-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+}
+
+.aq-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+/* Formulaires */
+.aq-form-group {
+    margin-bottom: 20px;
+}
+
+.aq-form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--navy);
+    font-size: 0.95rem;
+}
+
+.aq-form-label-required::after {
+    content: '*';
+    color: var(--danger);
+    margin-left: 4px;
+}
+
+.aq-form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.aq-form-control:focus {
+    outline: none;
+    border-color: var(--ocean);
+    box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
+}
+
+.aq-form-text {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.875rem;
+    color: var(--muted);
+}
+
+.aq-form-error {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.875rem;
+    color: var(--danger);
+}
+
+/* Badges */
+.aq-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.aq-badge-success {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.aq-badge-warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.aq-badge-danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.aq-badge-info {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.aq-badge-secondary {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .aq-admin-main {
+        margin-left: 0;
+        padding: 80px 16px 16px;
+    }
+    
+    .aq-page-header {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .aq-page-title {
+        font-size: 1.5rem;
+    }
+}
