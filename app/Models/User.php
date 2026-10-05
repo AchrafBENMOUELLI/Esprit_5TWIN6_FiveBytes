@@ -48,4 +48,20 @@ class User extends Authenticatable
         'role' => UserRole::class,
     ];
 }
+
+    /**
+     * Relation avec les incidents créés par cet utilisateur (en tant que citoyen)
+     */
+    public function incidentsSignales()
+    {
+        return $this->hasMany(\App\Models\Incident\Incident::class, 'citoyen_id');
+    }
+
+    /**
+     * Relation avec les incidents affectés à cet utilisateur (en tant que technicien)
+     */
+    public function incidentsAffectes()
+    {
+        return $this->hasMany(\App\Models\Incident\Incident::class, 'technicien_id');
+    }
 }

@@ -41,4 +41,12 @@ class Infrastructure extends Model
     {
         return $this->hasMany(Maintenance::class);
     }
+
+    /**
+     * Relation avec les incidents liés à cette infrastructure
+     */
+    public function incidents(): HasMany
+    {
+        return $this->hasMany(\App\Models\Incident\Incident::class);
+    }
 }

@@ -10,7 +10,7 @@
         <a href="{{ route('dashboard') }}" class="{{ request('module') ? '' : 'active' }}">Tableau de bord</a>
         <p class="aq-sidebar-label">Modules</p>
         <a href="{{ route('dashboard', ['module' => 'infrastructure']) }}" class="{{ request('module') === 'infrastructure' ? 'active' : '' }}">Infrastructure</a>
-        <a href="{{ route('dashboard', ['module' => 'incident']) }}" class="{{ request('module') === 'incident' ? 'active' : '' }}">Incidents</a>
+        <a href="{{ auth()->user()->role === \App\Enums\UserRole::Citoyen ? route('front.incidents.index') : route('admin.incidents.index') }}" class="{{ request()->routeIs('*.incidents.*') ? 'active' : '' }}">Incidents</a>
         <a href="{{ route('dashboard', ['module' => 'quality']) }}" class="{{ request('module') === 'quality' ? 'active' : '' }}">Qualité de l'eau</a>
         <a href="{{ route('dashboard', ['module' => 'drought']) }}" class="{{ request('module') === 'drought' ? 'active' : '' }}">Sécheresse</a>
         <a href="{{ route('dashboard', ['module' => 'project']) }}" class="{{ request('module') === 'project' ? 'active' : '' }}">Projets</a>
