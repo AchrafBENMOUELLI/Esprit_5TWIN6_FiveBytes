@@ -10,7 +10,14 @@
         <span>AquaSecure</span>
     </a>
 
+    @auth
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit" class="aq-login">Déconnexion</button>
+    </form>
+@else
     @unless (request()->routeIs('login', 'register'))
-    <a href="{{ route('login') }}" class="aq-login">Connexion</a>
+        <a href="{{ route('login') }}" class="aq-login">Connexion</a>
     @endunless
+@endauth
 </nav>

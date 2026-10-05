@@ -35,9 +35,16 @@
     color: var(--navy);
     font-weight: 600;
     transition: background 0.2s, color 0.2s;
+
 }
 
 .aq-login:hover {
     background: var(--white);
     color: var(--ocean);
+}
+
+button.aq-login {
+    border: none;
+    cursor: pointer;
+    font: inherit;
 }

@@ -1,0 +1,90 @@
+.aq-auth {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px;
+    background: #f4f8fb;
+}
+
+.aq-auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(11, 37, 69, 0.08);
+}
+
+.aq-auth-card h1 {
+    color: #0b2545;
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+}
+
+.aq-auth-sub {
+    color: #5b6b7c;
+    margin-bottom: 24px;
+}
+
+.aq-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.aq-field label {
+    color: #0b2545;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.aq-field input {
+    padding: 10px 12px;
+    border: 1px solid #d5e0ea;
+    border-radius: 8px;
+    outline: none;
+}
+
+.aq-field input:focus {
+    border-color: #00b8d9;
+    box-shadow: 0 0 0 3px rgba(0, 184, 217, 0.15);
+}
+
+.aq-error {
+    color: #d93b3b;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+.aq-submit {
+    width: 100%;
+    padding: 11px;
+    border: none;
+    border-radius: 8px;
+    background: #1565c0;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.aq-submit:hover {
+    background: #0b2545;
+}
+
+.aq-switch {
+    text-align: center;
+    margin: 20px 0 0;
+    color: #5b6b7c;
+}
+
+.aq-switch a {
+    color: #1565c0;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.aq-switch a:hover {
+    color: #00b8d9;
+}
