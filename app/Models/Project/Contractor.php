@@ -10,6 +10,14 @@ class Contractor extends Model
     use HasFactory;
 
     /**
+     * The name of the factory that should be used for this model.
+     */
+    protected static function newFactory()
+    {
+        return \Database\Factories\ContractorFactory::new();
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
