@@ -1,30 +1,80 @@
-@php
-use Carbon\Carbon;
-@endphp
+@extends('components.project.layouts.front')
 
-<x-project.layouts.front 
-    title="Projets de Rénovation"
-    :hero="[
-        'title' => 'Projets de Rénovation',
-        'subtitle' => 'Découvrez les projets de rénovation et de modernisation des infrastructures hydrauliques',
-        'background' => 'linear-gradient(135deg, var(--ocean) 0%, var(--aqua) 100%)'
-    ]">
+@section('title', 'Projets de Rénovation')
 
-    {{-- Filtres et recherche --}}
-    <div class="aq-card" style="margin-bottom: 2rem;">
-        <form method="GET" action="{{ route('projects.index') }}" class="aq-filters-form">
-            <div class="aq-form-row">
-                <div class="aq-form-group">
+@section('content')
+{{-- Hero Section --}}
+<div class="hero-section bg-gradient text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold mb-3">
+                    <i class="fas fa-water me-3"></i>
+                    Projets de Rénovation
+                </h1>
+                <p class="lead mb-4">
+                    Découvrez et soutenez les projets de modernisation des infrastructures hydrauliques. 
+                    Ensemble, construisons un avenir durable pour l'accès à l'eau potable.
+                </p>
+                <div class="d-flex gap-3">
+                    <div class="stat-box">
+                        <h3 class="mb-0">{{ $projects->total() }}</h3>
+                        <small>Projets</small>
+                    </div>
+                    <div class="stat-box">
+                        <h3 class="mb-0">{{ $projects->where('statut', 'en_cours')->count() }}</h3>
+                        <small>En cours</small>
+                    </div>
+                    <div class="stat-box">
+                        <h3 class="mb-0">{{ $projects->where('statut', 'terminé')->count() }}</h3>
+                        <small>Terminés</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center d-none d-lg-block">
+                <i class="fas fa-city opacity-25" style="font-size: 15rem;"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    {{-- Filtres --}}
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form method="GET" action="{{ route('projects.index') }}" class="row g-3">
+                <div class="col-md-3">
+                    <label for="search" class="form-label">
+                        <i class="fas fa-search me-1"></i> Recherche
+                    </label>
                     <input type="text" 
+                           class="form-control" 
+                           id="search" 
                            name="search" 
-                           class="aq-form-control" 
-                           placeholder="Rechercher un projet..." 
+                           placeholder="Nom du projet..." 
                            value="{{ request('search') }}">
                 </div>
-                
-                <div class="aq-form-group">
-                    <select name="type" class="aq-form-control">
-                        <option value="">Tous les types</option>
+
+                <div class="col-md-3">
+                    <label for="zone_id" class="form-label">
+                        <i class="fas fa-map-marker-alt me-1"></i> Zone
+                    </label>
+                    <select class="form-select" id="zone_id" name="zone_id">
+                        <option value="">Toutes les zones</option>
+                        @foreach(\App\Models\Infrastructure\Zone::all() as $zone)
+                            <option value="{{ $zone->id }}" {{ request('zone_id') == $zone->id ? 'selected' : '' }}>
+                                {{ $zone->nom }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-md-2">
+                    <label for="type" class="form-label">
+                        <i class="fas fa-tools me-1"></i> Type
+                    </label>
+                    <select class="form-select" id="type" name="type">
+                        <option value="">Tous</option>
                         <option value="réparation" {{ request('type') === 'réparation' ? 'selected' : '' }}>Réparation</option>
                         <option value="modernisation" {{ request('type') === 'modernisation' ? 'selected' : '' }}>Modernisation</option>
                         <option value="extension" {{ request('type') === 'extension' ? 'selected' : '' }}>Extension</option>
@@ -32,203 +82,237 @@ use Carbon\Carbon;
                     </select>
                 </div>
 
-                <div class="aq-form-group">
-                    <select name="statut" class="aq-form-control">
-                        <option value="">Tous les statuts</option>
+                <div class="col-md-2">
+                    <label for="statut" class="form-label">
+                        <i class="fas fa-flag me-1"></i> Statut
+                    </label>
+                    <select class="form-select" id="statut" name="statut">
+                        <option value="">Tous</option>
                         <option value="planifié" {{ request('statut') === 'planifié' ? 'selected' : '' }}>Planifié</option>
                         <option value="en_cours" {{ request('statut') === 'en_cours' ? 'selected' : '' }}>En cours</option>
                         <option value="terminé" {{ request('statut') === 'terminé' ? 'selected' : '' }}>Terminé</option>
                     </select>
                 </div>
 
-                <button type="submit" class="aq-btn aq-btn-primary">
-                    Rechercher
-                </button>
-                
-                @if(request()->hasAny(['search', 'type', 'statut']))
-                    <a href="{{ route('projects.index') }}" class="aq-btn aq-btn-outline">
-                        Réinitialiser
-                    </a>
-                @endif
-            </div>
-        </form>
-    </div>
-
-    {{-- Statistiques --}}
-    <div class="aq-stats-grid" style="margin-bottom: 3rem;">
-        <div class="aq-stat-card">
-            <div class="aq-stat-icon" style="background: var(--ocean);">
-                <svg fill="none" stroke="white" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                </svg>
-            </div>
-            <div class="aq-stat-info">
-                <div class="aq-stat-label">Total Projets</div>
-                <div class="aq-stat-value">{{ $projects->total() }}</div>
-            </div>
-        </div>
-
-        <div class="aq-stat-card">
-            <div class="aq-stat-icon" style="background: var(--aqua);">
-                <svg fill="none" stroke="white" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                </svg>
-            </div>
-            <div class="aq-stat-info">
-                <div class="aq-stat-label">En cours</div>
-                <div class="aq-stat-value">{{ $projects->where('statut', 'en_cours')->count() }}</div>
-            </div>
-        </div>
-
-        <div class="aq-stat-card">
-            <div class="aq-stat-icon" style="background: var(--success);">
-                <svg fill="none" stroke="white" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-            </div>
-            <div class="aq-stat-info">
-                <div class="aq-stat-label">Terminés</div>
-                <div class="aq-stat-value">{{ $projects->where('statut', 'terminé')->count() }}</div>
-            </div>
-        </div>
-
-        <div class="aq-stat-card">
-            <div class="aq-stat-icon" style="background: var(--warning);">
-                <svg fill="none" stroke="white" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                </svg>
-            </div>
-            <div class="aq-stat-info">
-                <div class="aq-stat-label">Budget Total</div>
-                <div class="aq-stat-value">{{ number_format($projects->sum('budget_prevu') / 1000000, 1) }}M €</div>
-            </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-filter me-1"></i> Filtrer
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
-    {{-- Liste des projets --}}
-    <div class="aq-grid-3">
+    {{-- Grille de projets --}}
+    <div class="row g-4">
         @forelse($projects as $project)
-            <div class="aq-card aq-project-card">
-                {{-- En-tête --}}
-                <div class="aq-project-header">
-                    @php
-                        $badgeClass = match($project->statut) {
-                            'planifié' => 'aq-badge-secondary',
-                            'en_cours' => 'aq-badge-primary',
-                            'terminé' => 'aq-badge-success',
-                            'suspendu' => 'aq-badge-warning',
-                            'annulé' => 'aq-badge-danger',
-                            default => 'aq-badge-secondary'
-                        };
-                    @endphp
-                    <span class="aq-badge {{ $badgeClass }}">
-                        {{ ucfirst(str_replace('_', ' ', $project->statut)) }}
-                    </span>
-                    <span class="aq-badge aq-badge-info">{{ ucfirst($project->type) }}</span>
-                </div>
-
-                {{-- Contenu --}}
-                <h3 class="aq-project-title">{{ $project->titre }}</h3>
-                <p class="aq-project-description">{{ Str::limit($project->description, 120) }}</p>
-
-                {{-- Informations --}}
-                <div class="aq-project-info">
-                    <div class="aq-info-item">
-                        <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-                        <span>{{ $project->zone->nom ?? 'Non défini' }}</span>
-                    </div>
-                    
-                    <div class="aq-info-item">
-                        <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                        </svg>
-                        <span>{{ Carbon::parse($project->date_debut)->format('d/m/Y') }}</span>
-                    </div>
-                </div>
-
-                {{-- Budget --}}
-                <div class="aq-project-budget">
-                    <div>
-                        <span class="aq-label">Budget:</span>
-                        <strong>{{ number_format($project->budget_prevu, 0, ',', ' ') }} €</strong>
-                    </div>
-                    @if($project->fundings->count() > 0)
-                        <div style="font-size: 0.875rem; color: var(--success);">
-                            <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 16px; height: 16px;">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            {{ number_format(($project->fundingTotal() / $project->budget_prevu) * 100, 0) }}% financé
+            <div class="col-lg-4 col-md-6">
+                <div class="card project-card border-0 shadow-sm h-100">
+                    {{-- Header avec badge statut --}}
+                    <div class="card-header border-0 bg-white pb-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            @php
+                                $badgeClass = match($project->statut) {
+                                    'planifié' => 'secondary',
+                                    'en_cours' => 'primary',
+                                    'terminé' => 'success',
+                                    default => 'secondary'
+                                };
+                            @endphp
+                            <span class="badge bg-{{ $badgeClass }} mb-2">
+                                <i class="fas fa-{{ match($project->statut) {
+                                    'planifié' => 'clock',
+                                    'en_cours' => 'spinner',
+                                    'terminé' => 'check-circle',
+                                    default => 'question'
+                                } }} me-1"></i>
+                                {{ ucfirst(str_replace('_', ' ', $project->statut)) }}
+                            </span>
+                            <span class="badge bg-info">
+                                {{ ucfirst($project->type) }}
+                            </span>
                         </div>
-                    @endif
-                </div>
-
-                {{-- Avancement --}}
-                <div class="aq-project-progress">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span class="aq-label">Avancement</span>
-                        <strong>{{ $project->avancement_pourcentage }}%</strong>
                     </div>
-                    <div class="aq-progress">
-                        <div class="aq-progress-bar" style="width: {{ $project->avancement_pourcentage }}%"></div>
-                    </div>
-                </div>
 
-                {{-- Actions --}}
-                <div class="aq-project-actions">
-                    <a href="{{ route('projects.show', $project) }}" class="aq-btn aq-btn-primary aq-btn-block">
-                        Voir les détails
-                    </a>
-                    @auth
-                        @if(auth()->user()->role === 'citoyen')
-                            <a href="{{ route('projects.donate', $project) }}" class="aq-btn aq-btn-outline aq-btn-block">
-                                <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                                </svg>
-                                Faire un don
+                    <div class="card-body">
+                        {{-- Titre --}}
+                        <h5 class="card-title mb-3">
+                            <i class="fas fa-project-diagram text-primary me-2"></i>
+                            {{ $project->titre }}
+                        </h5>
+
+                        {{-- Description --}}
+                        <p class="card-text text-muted small mb-3">
+                            {{ Str::limit($project->description, 100) }}
+                        </p>
+
+                        {{-- Infos --}}
+                        <div class="project-info mb-3">
+                            <div class="info-item">
+                                <i class="fas fa-map-marker-alt text-danger"></i>
+                                <span>{{ $project->zone->nom ?? 'N/A' }}</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-building text-info"></i>
+                                <span>{{ $project->infrastructure->nom ?? 'N/A' }}</span>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-calendar text-success"></i>
+                                <span>{{ \Carbon\Carbon::parse($project->date_debut)->format('d/m/Y') }}</span>
+                            </div>
+                        </div>
+
+                        {{-- Budget --}}
+                        <div class="budget-section mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small text-muted">
+                                    <i class="fas fa-euro-sign me-1"></i> Budget
+                                </span>
+                                <strong class="text-primary">
+                                    {{ number_format($project->budget_prevu, 0, ',', ' ') }} €
+                                </strong>
+                            </div>
+                            @if($project->fundings->count() > 0)
+                                @php
+                                    $tauxFinancement = $project->budget_prevu > 0 ? ($project->fundingTotal() / $project->budget_prevu) * 100 : 0;
+                                @endphp
+                                <div class="small text-success mb-1">
+                                    <i class="fas fa-check-circle me-1"></i>
+                                    {{ number_format($tauxFinancement, 0) }}% financé
+                                </div>
+                            @endif
+                        </div>
+
+                        {{-- Avancement --}}
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small text-muted">Avancement</span>
+                                <strong>{{ $project->avancement_pourcentage }}%</strong>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-primary" 
+                                     role="progressbar" 
+                                     style="width: {{ $project->avancement_pourcentage }}%">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Footer avec boutons --}}
+                    <div class="card-footer bg-white border-0 pt-0">
+                        <div class="d-grid gap-2">
+                            <a href="{{ route('projects.show', $project) }}" 
+                               class="btn btn-outline-primary">
+                                <i class="fas fa-eye me-2"></i>
+                                Voir les détails
                             </a>
-                        @endif
-                    @endauth
+                            @auth
+                                @if(auth()->user()->role === \App\Enums\UserRole::Citoyen)
+                                    <a href="{{ route('projects.donate', $project) }}" 
+                                       class="btn btn-success btn-sm">
+                                        <i class="fas fa-heart me-2"></i>
+                                        Soutenir ce projet
+                                    </a>
+                                @endif
+                            @endauth
+                        </div>
+                    </div>
                 </div>
             </div>
         @empty
-            <div class="aq-card" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
-                <svg class="aq-icon" style="width: 64px; height: 64px; margin: 0 auto 1rem; color: var(--text-muted);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                </svg>
-                <h3 style="color: var(--navy); margin-bottom: 0.5rem;">Aucun projet trouvé</h3>
-                <p style="color: var(--text-muted);">Essayez de modifier vos critères de recherche.</p>
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="fas fa-search fa-4x text-muted mb-4"></i>
+                    <h3 class="text-muted">Aucun projet trouvé</h3>
+                    <p class="text-muted mb-4">Essayez de modifier vos critères de recherche</p>
+                    <a href="{{ route('projects.index') }}" class="btn btn-primary">
+                        <i class="fas fa-redo me-2"></i>
+                        Réinitialiser les filtres
+                    </a>
+                </div>
             </div>
         @endforelse
     </div>
 
     {{-- Pagination --}}
     @if($projects->hasPages())
-        <div style="margin-top: 3rem; display: flex; justify-content: center;">
-            {{ $projects->links() }}
+        <div class="d-flex justify-content-center mt-5">
+            {{ $projects->links('pagination::bootstrap-5') }}
         </div>
     @endif
 
-    {{-- Section CTA pour les citoyens connectés --}}
-    @auth
-        @if(auth()->user()->role === 'citoyen')
-            <div class="aq-cta-section" style="margin-top: 4rem;">
-                <div class="aq-card" style="background: linear-gradient(135deg, var(--ocean) 0%, var(--aqua) 100%); color: white; text-align: center; padding: 3rem;">
-                    <svg class="aq-icon" style="width: 48px; height: 48px; margin: 0 auto 1rem;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
-                    </svg>
-                    <h2 style="font-size: 1.75rem; margin-bottom: 1rem;">Soutenez les projets de rénovation</h2>
-                    <p style="font-size: 1.125rem; margin-bottom: 2rem; opacity: 0.9;">
-                        Votre contribution permet de moderniser les infrastructures hydrauliques et d'améliorer l'accès à l'eau potable.
-                    </p>
-                    <a href="{{ route('my-donations') }}" class="aq-btn" style="background: white; color: var(--ocean); font-weight: 600;">
-                        Voir mes dons
-                    </a>
-                </div>
+    {{-- CTA Section --}}
+    @guest
+        <div class="card border-0 bg-gradient text-white mt-5 shadow-lg">
+            <div class="card-body p-5 text-center">
+                <i class="fas fa-hands-helping fa-4x mb-4 opacity-75"></i>
+                <h2 class="mb-3">Rejoignez Notre Communauté</h2>
+                <p class="lead mb-4">
+                    Connectez-vous pour soutenir les projets et suivre leur évolution
+                </p>
+                <a href="{{ route('login') }}" class="btn btn-light btn-lg">
+                    <i class="fas fa-sign-in-alt me-2"></i>
+                    Se connecter
+                </a>
             </div>
-        @endif
-    @endauth
+        </div>
+    @endguest
+</div>
+@endsection
 
-</x-project.layouts.front>
+@push('styles')
+<style>
+    .bg-gradient {
+        background: linear-gradient(135deg, #1565c0 0%, #00b8d9 100%);
+    }
+
+    .hero-section .stat-box {
+        background: rgba(255, 255, 255, 0.2);
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+        backdrop-filter: blur(10px);
+    }
+
+    .hero-section .stat-box h3 {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .project-card {
+        transition: all 0.3s ease;
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+
+    .project-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+    }
+
+    .project-info .info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.875rem;
+    }
+
+    .project-info .info-item i {
+        width: 20px;
+    }
+
+    .progress {
+        border-radius: 1rem;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        transition: width 0.6s ease;
+    }
+
+    .badge {
+        font-weight: 500;
+        padding: 0.5rem 0.75rem;
+    }
+</style>
+@endpush
