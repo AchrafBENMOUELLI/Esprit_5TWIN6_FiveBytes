@@ -1,0 +1,11 @@
+.aq-dash-main {
+    margin-left: 240px;
+    padding: 88px 24px 24px;
+    min-height: 100vh;
+    background: #f4f8fb;
+}
+
+.aq-dash-main h1 {
+    color: #0b2545;
+    font-size: 1.6rem;
+}

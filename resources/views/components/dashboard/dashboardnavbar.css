@@ -1,0 +1,57 @@
+.aq-dnav {
+    position: fixed;
+    top: 0;
+    left: 240px;
+    right: 0;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    background: #fff;
+    border-bottom: 1px solid #e3ebf2;
+    z-index: 10;
+}
+
+.aq-dnav-title {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #0b2545;
+}
+
+.aq-dnav-user {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.aq-dnav-info {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+    line-height: 1.2;
+}
+
+.aq-dnav-info strong {
+    color: #0b2545;
+}
+
+.aq-dnav-info span {
+    color: #5b6b7c;
+    font-size: 0.8rem;
+}
+
+.aq-dnav-logout {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #1565c0;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.aq-dnav-logout:hover {
+    background: #0b2545;
+}
