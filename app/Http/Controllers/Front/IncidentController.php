@@ -53,7 +53,7 @@ class IncidentController extends Controller
         // Pagination
         $incidents = $query->paginate(10)->withQueryString();
 
-        return view('incident.front.index', [
+        return view('front.incident.index', [
             'incidents' => $incidents,
             'statuts' => IncidentStatut::cases(),
             'urgences' => IncidentUrgence::cases(),
@@ -72,7 +72,7 @@ class IncidentController extends Controller
         // Récupérer la liste des infrastructures
         $infrastructures = Infrastructure::orderBy('nom')->get();
 
-        return view('incident.front.create', [
+        return view('front.incident.create', [
             'infrastructures' => $infrastructures,
             'urgences' => IncidentUrgence::cases(),
             'types' => IncidentType::cases(),
@@ -124,7 +124,7 @@ class IncidentController extends Controller
         // Charger les relations
         $incident->load(['technicien', 'infrastructure', 'parent', 'doublons']);
 
-        return view('incident.front.show', [
+        return view('front.incident.show', [
             'incident' => $incident,
         ]);
     }
@@ -139,7 +139,7 @@ class IncidentController extends Controller
         // Récupérer la liste des infrastructures
         $infrastructures = Infrastructure::orderBy('nom')->get();
 
-        return view('incident.front.edit', [
+        return view('front.incident.edit', [
             'incident' => $incident,
             'infrastructures' => $infrastructures,
             'urgences' => IncidentUrgence::cases(),
