@@ -33,6 +33,9 @@
                 <a href="{{ route('admin.project.index') }}" class="{{ request()->routeIs('admin.project.*') ? 'active' : '' }}">
                     Projets
                 </a>
+                <a href="{{ route('admin.contractor.index') }}" class="{{ request()->routeIs('admin.contractor.*') ? 'active' : '' }}">
+                    Prestataires
+                </a>
                 {{-- Les autres modules admin seront ajoutés par vos collègues --}}
                 {{-- <a href="{{ route('admin.infrastructure.index') }}">Infrastructures</a> --}}
                 {{-- <a href="{{ route('admin.incident.index') }}">Incidents</a> --}}
