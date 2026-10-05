@@ -1,0 +1,23 @@
+.aq-main {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    background: linear-gradient(180deg, #e6f2fa 0%, var(--bg) 100%);
+}
+
+.aq-main h1 {
+    margin: 0 0 12px;
+    color: var(--navy);
+    font-size: 2.6rem;
+    font-weight: 700;
+}
+
+.aq-main p {
+    max-width: 600px;
+    color: var(--muted);
+    font-size: 1.1rem;
+}

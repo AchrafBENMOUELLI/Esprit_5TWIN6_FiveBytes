@@ -1,0 +1,24 @@
+:root {
+    --navy: #0b2545;
+    --ocean: #1565c0;
+    --aqua: #00b8d9;
+    --bg: #f4f8fb;
+    --white: #ffffff;
+    --text: #1e2a3a;
+    --muted: #5f7285;
+    --border: #dce6ee;
+
+    --success: #2e9e5b;
+    --warning: #f59e0b;
+    --danger: #d93b3b;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+    line-height: 1.6;
+}
+
+a { text-decoration: none; }

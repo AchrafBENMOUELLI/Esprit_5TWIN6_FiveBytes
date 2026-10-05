@@ -1,0 +1,10 @@
+.aq-footer {
+    padding: 24px 40px;
+    background: var(--navy);
+    border-top: 3px solid var(--aqua);
+    color: #b8c7d9;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.aq-footer p { margin: 0; }
