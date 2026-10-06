@@ -18,29 +18,17 @@
 
             <div class="aq-drought-admin-menu">
                 <a href="{{ route('admin.drought.restrictions.index') }}" class="aq-btn aq-btn-primary">
-                    📋 TESTER : Restrictions (CRUD)
+                    📋 Restrictions (CRUD)
                 </a>
                 <a href="{{ route('admin.drought.water-levels.index') }}" class="aq-btn aq-btn-info">
-                    💧 TESTER : Niveaux d'Eau
+                    💧 Niveaux d'Eau
                 </a>
                 <a href="{{ route('admin.drought.consumption.index') }}" class="aq-btn aq-btn-info">
-                    📊 TESTER : Consommation
+                    📊 Consommation
                 </a>
                 <a href="{{ route('admin.drought.scheduled-cuts.index') }}" class="aq-btn aq-btn-warning">
-                    ✂️ TESTER : Coupures Planifiées
+                    ✂️ Coupures Planifiées
                 </a>
-            </div>
-
-            <div class="aq-card" style="margin-top: 2rem; border-left: 4px solid var(--ocean);">
-                <h3>✨ Fonctionnalités à Tester</h3>
-                <ul style="margin-left: 1.5rem;">
-                    <li><strong>Créer</strong> : Cliquez "+ Créer" pour ajouter une restriction</li>
-                    <li><strong>Lire</strong> : Les restrictions s'affichent dans la liste</li>
-                    <li><strong>Éditer</strong> : Cliquez "✏️ Éditer" pour modifier</li>
-                    <li><strong>Supprimer</strong> : Cliquez "🗑️ Supprimer" pour effacer</li>
-                    <li><strong>Validation</strong> : Laissez un champ vide pour voir les erreurs</li>
-                    <li><strong>old()</strong> : Les anciennes valeurs restent après une erreur</li>
-                </ul>
             </div>
         @else
             <div class="aq-card">
