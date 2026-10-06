@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="aq-drought-container" style="max-width: 700px;">
-    <h1 style="color: var(--navy); margin-bottom: 2rem;">➕ Créer une Restriction</h1>
+    <h1 style="color: var(--navy); margin-bottom: 2rem;">Créer une Restriction</h1>
 
     <form method="POST" action="{{ route('admin.drought.restrictions.store') }}" class="aq-card">
         @csrf
@@ -68,7 +68,7 @@
         </div>
 
         <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-            <button type="submit" class="aq-btn aq-btn-success">✅ Créer</button>
+            <button type="submit" class="aq-btn aq-btn-success">Créer</button>
             <a href="{{ route('admin.drought.restrictions.index') }}" class="aq-btn aq-btn-secondary">← Annuler</a>
         </div>
     </form>

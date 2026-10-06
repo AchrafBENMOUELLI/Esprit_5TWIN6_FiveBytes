@@ -12,7 +12,7 @@
 
     <div style="display: flex; gap: 1rem; align-items: center;">
         @auth
-            <a href="{{ route('drought.test') }}" style="color: var(--navy); text-decoration: none; font-weight: 500;">🌊 Gestion 4</a>
+            <a href="{{ route('drought.test') }}" style="color: var(--navy); text-decoration: none; font-weight: 500;">Gestion 4</a>
         @endauth
 
         @auth

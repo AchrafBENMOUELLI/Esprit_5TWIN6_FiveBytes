@@ -6,28 +6,23 @@
 <main class="aq-main">
     <div class="aq-drought-container">
         <div class="aq-drought-header">
-            <h1>🌊 Gestion 4 - Test CRUD</h1>
-            <p>Testez la gestion complète des restrictions d'eau</p>
+            <h1>Gestion 4 - Sécheresse et Ressources</h1>
+            <p>Gestion complète des restrictions d'eau</p>
         </div>
 
         @if(auth()->check())
-            <div class="aq-card" style="margin-bottom: 2rem; background: var(--bg);">
-                <h2>Bienvenue {{ auth()->user()->name }}</h2>
-                <p style="color: var(--muted);">Testez directement le CRUD ci-dessous :</p>
-            </div>
-
             <div class="aq-drought-admin-menu">
                 <a href="{{ route('admin.drought.restrictions.index') }}" class="aq-btn aq-btn-primary">
-                    📋 Restrictions (CRUD)
+                    Restrictions (CRUD)
                 </a>
                 <a href="{{ route('admin.drought.water-levels.index') }}" class="aq-btn aq-btn-info">
-                    💧 Niveaux d'Eau
+                    Niveaux d'Eau
                 </a>
                 <a href="{{ route('admin.drought.consumption.index') }}" class="aq-btn aq-btn-info">
-                    📊 Consommation
+                    Consommation
                 </a>
                 <a href="{{ route('admin.drought.scheduled-cuts.index') }}" class="aq-btn aq-btn-warning">
-                    ✂️ Coupures Planifiées
+                    Coupures Planifiées
                 </a>
             </div>
         @else
