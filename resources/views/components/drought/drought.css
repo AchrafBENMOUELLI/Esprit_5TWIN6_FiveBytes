@@ -1,0 +1,291 @@
+.aq-drought-container {
+    padding: 2rem;
+}
+
+.aq-drought-header {
+    margin-bottom: 2rem;
+}
+
+.aq-drought-header h1 {
+    color: var(--navy);
+    margin: 0 0 0.5rem 0;
+    font-size: 2rem;
+}
+
+.aq-drought-header p {
+    color: var(--muted);
+    margin: 0;
+}
+
+.aq-drought-admin-menu,
+.aq-drought-citizen-menu {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.aq-btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.aq-btn-primary {
+    background-color: var(--ocean);
+    color: var(--white);
+}
+
+.aq-btn-primary:hover {
+    background-color: var(--navy);
+    transform: translateY(-2px);
+}
+
+.aq-btn-secondary {
+    background-color: var(--aqua);
+    color: var(--navy);
+}
+
+.aq-btn-secondary:hover {
+    background-color: var(--ocean);
+    color: var(--white);
+    transform: translateY(-2px);
+}
+
+.aq-btn-info {
+    background-color: var(--aqua);
+    color: var(--navy);
+}
+
+.aq-btn-info:hover {
+    background-color: var(--ocean);
+    transform: translateY(-2px);
+}
+
+.aq-btn-warning {
+    background-color: var(--warning);
+    color: var(--white);
+}
+
+.aq-btn-warning:hover {
+    background-color: #d68c00;
+    transform: translateY(-2px);
+}
+
+.aq-btn-danger {
+    background-color: var(--danger);
+    color: var(--white);
+}
+
+.aq-btn-danger:hover {
+    background-color: #b82e2e;
+    transform: translateY(-2px);
+}
+
+.aq-btn-success {
+    background-color: var(--success);
+    color: var(--white);
+}
+
+.aq-btn-success:hover {
+    background-color: #258348;
+    transform: translateY(-2px);
+}
+
+/* Tables */
+.aq-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.aq-table thead {
+    background-color: var(--navy);
+    color: var(--white);
+}
+
+.aq-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.aq-table td {
+    padding: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+.aq-table tbody tr:hover {
+    background-color: var(--bg);
+}
+
+/* Forms */
+.aq-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.aq-form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+    font-weight: 500;
+}
+
+.aq-form-group input,
+.aq-form-group select,
+.aq-form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    font-family: inherit;
+    font-size: 1rem;
+    color: var(--text);
+}
+
+.aq-form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.aq-form-group input:focus,
+.aq-form-group select:focus,
+.aq-form-group textarea:focus {
+    outline: none;
+    border-color: var(--ocean);
+    box-shadow: 0 0 0 3px rgba(21, 101, 192, 0.1);
+}
+
+/* Error Messages */
+.aq-error {
+    color: var(--danger);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+/* Badges */
+.aq-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.aq-badge-vigilance {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.aq-badge-alerte {
+    background-color: #fed7aa;
+    color: #92400e;
+}
+
+.aq-badge-crise {
+    background-color: #fecaca;
+    color: #7f1d1d;
+}
+
+.aq-badge-actif {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.aq-badge-inactif {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
+/* Cards */
+.aq-card {
+    background: var(--white);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    margin-bottom: 1.5rem;
+}
+
+.aq-card h3 {
+    color: var(--navy);
+    margin-top: 0;
+}
+
+/* Alert Box */
+.aq-alert {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid;
+}
+
+.aq-alert-success {
+    background-color: #ecfdf5;
+    border-color: var(--success);
+    color: #065f46;
+}
+
+.aq-alert-error {
+    background-color: #fef2f2;
+    border-color: var(--danger);
+    color: #7f1d1d;
+}
+
+.aq-alert-info {
+    background-color: #eff6ff;
+    border-color: var(--ocean);
+    color: #0c2d6b;
+}
+
+.aq-alert-warning {
+    background-color: #fffbeb;
+    border-color: var(--warning);
+    color: #78350f;
+}
+
+/* Grid */
+.aq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+/* Pagination */
+.aq-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 2rem 0;
+}
+
+.aq-pagination a,
+.aq-pagination span {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 0.375rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.3s ease;
+}
+
+.aq-pagination a:hover {
+    background-color: var(--ocean);
+    color: var(--white);
+    border-color: var(--ocean);
+}
+
+.aq-pagination .active {
+    background-color: var(--ocean);
+    color: var(--white);
+    border-color: var(--ocean);
+}
