@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreIncidentRequest;
 use App\Http\Requests\UpdateIncidentRequest;
 use App\Models\Incident\Incident;
+use App\Models\Incident\IncidentPhoto;
 use App\Models\Infrastructure\Infrastructure;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class IncidentController extends Controller
         $this->authorize('viewAny', Incident::class);
 
         // Construction de la requête avec eager loading pour éviter N+1
-        $query = Incident::with(['citoyen', 'technicien', 'infrastructure']);
+        $query = Incident::with(['citoyen', 'technicien', 'infrastructure.zone']);
 
         // Filtre par recherche (référence, description, nom du citoyen)
         if ($request->filled('search')) {
@@ -105,6 +106,19 @@ class IncidentController extends Controller
 
             $incident = Incident::create($request->validated());
 
+            // Gérer l'upload des photos si présentes
+            if ($request->hasFile('photos')) {
+                foreach ($request->file('photos') as $photo) {
+                    $path = $photo->store("incidents/{$incident->id}", 'public');
+                    
+                    IncidentPhoto::create([
+                        'incident_id' => $incident->id,
+                        'chemin_fichier' => $path,
+                        'legende' => $request->legende,
+                    ]);
+                }
+            }
+
             DB::commit();
 
             return redirect()
@@ -128,7 +142,7 @@ class IncidentController extends Controller
         $this->authorize('view', $incident);
 
         // Charger les relations pour éviter N+1
-        $incident->load(['citoyen', 'technicien', 'infrastructure', 'parent', 'doublons']);
+        $incident->load(['citoyen', 'technicien', 'infrastructure.zone', 'parent', 'doublons', 'photos', 'comments.auteur', 'statusHistory.modificateur']);
 
         return view('incident.admin.show', [
             'incident' => $incident,
@@ -186,18 +200,7 @@ class IncidentController extends Controller
 
             $data = $request->validated();
 
-            // Si le statut passe à "resolu", remplir date_resolution
-            if (isset($data['statut']) && $data['statut'] == IncidentStatut::Resolu->value) {
-                if ($incident->statut !== IncidentStatut::Resolu) {
-                    $data['date_resolution'] = now();
-                }
-            }
-
-            // Si le statut n'est plus "resolu", vider date_resolution
-            if (isset($data['statut']) && $data['statut'] != IncidentStatut::Resolu->value) {
-                $data['date_resolution'] = null;
-            }
-
+            // La gestion de date_resolution est maintenant automatique via l'Observer
             $incident->update($data);
 
             DB::commit();

@@ -5,6 +5,7 @@ namespace App\Models\Incident;
 use App\Enums\IncidentStatut;
 use App\Enums\IncidentType;
 use App\Enums\IncidentUrgence;
+use App\Enums\UserRole;
 use App\Models\Infrastructure\Infrastructure;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class Incident extends Model
 {
@@ -127,6 +129,31 @@ class Incident extends Model
     }
 
     /**
+     * Relation avec les photos de l'incident
+     */
+    public function photos(): HasMany
+    {
+        return $this->hasMany(IncidentPhoto::class);
+    }
+
+    /**
+     * Relation avec les commentaires de l'incident
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(IncidentComment::class);
+    }
+
+    /**
+     * Relation avec l'historique des changements de statut
+     */
+    public function statusHistory(): HasMany
+    {
+        return $this->hasMany(IncidentStatusHistory::class)
+                    ->orderBy('date_changement', 'desc');
+    }
+
+    /**
      * Scope pour filtrer par statut
      */
     public function scopeParStatut(Builder $query, string|IncidentStatut $statut): Builder
@@ -159,5 +186,24 @@ class Incident extends Model
                   $query->where('name', 'LIKE', "%{$search}%");
               });
         });
+    }
+
+    /**
+     * Récupère les commentaires visibles pour un utilisateur donné
+     * Les commentaires internes ne sont visibles que par les Gestionnaires et Admins
+     */
+    public function visibleComments(User $user): Collection
+    {
+        $query = $this->comments()->with('auteur');
+
+        // Si l'utilisateur est un Gestionnaire ou Admin, il voit tous les commentaires
+        if (in_array($user->role, [UserRole::Gestionnaire, UserRole::Admin])) {
+            return $query->orderBy('created_at', 'desc')->get();
+        }
+
+        // Sinon, ne montrer que les commentaires publics
+        return $query->where('interne', false)
+                     ->orderBy('created_at', 'desc')
+                     ->get();
     }
 }

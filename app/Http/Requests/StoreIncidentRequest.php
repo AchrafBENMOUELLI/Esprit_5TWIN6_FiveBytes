@@ -59,6 +59,9 @@ class StoreIncidentRequest extends FormRequest
             'urgence' => ['required', Rule::enum(IncidentUrgence::class)],
             'infrastructure_id' => ['nullable', 'exists:infrastructures,id'],
             'citoyen_id' => ['required', 'exists:users,id'], // Obligatoire pour tous
+            'photos' => ['nullable', 'array', 'max:5'],
+            'photos.*' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'], // 4 Mo
+            'legende' => ['nullable', 'string', 'max:255'],
         ];
 
         // Champs réservés aux gestionnaires et admins
@@ -89,6 +92,9 @@ class StoreIncidentRequest extends FormRequest
             'technicien_id' => 'technicien',
             'infrastructure_id' => 'infrastructure',
             'incident_parent_id' => 'incident parent',
+            'photos' => 'photos',
+            'photos.*' => 'photo',
+            'legende' => 'légende',
         ];
     }
 
@@ -119,6 +125,14 @@ class StoreIncidentRequest extends FormRequest
             'technicien_id.exists' => 'Le technicien sélectionné n\'existe pas.',
             'infrastructure_id.exists' => 'L\'infrastructure sélectionnée n\'existe pas.',
             'incident_parent_id.exists' => 'L\'incident parent sélectionné n\'existe pas.',
+            'photos.array' => 'Les photos doivent être un tableau.',
+            'photos.max' => 'Vous ne pouvez télécharger que :max photos maximum.',
+            'photos.*.required' => 'Chaque photo est requise.',
+            'photos.*.image' => 'Le fichier doit être une image.',
+            'photos.*.mimes' => 'Les formats autorisés sont : jpg, jpeg, png, webp.',
+            'photos.*.max' => 'Chaque photo ne doit pas dépasser :max Ko (4 Mo).',
+            'legende.string' => 'La légende doit être une chaîne de caractères.',
+            'legende.max' => 'La légende ne doit pas dépasser :max caractères.',
         ];
     }
 }

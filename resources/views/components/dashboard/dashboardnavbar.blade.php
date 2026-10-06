@@ -5,7 +5,7 @@
 </style>
 
 <header class="aq-dnav">
-    <h2 class="aq-dnav-title">Back office</h2>
+    <h2 class="aq-dnav-title">Bureau d'administration</h2>
 
     <div class="aq-dnav-user">
         <div class="aq-dnav-info">

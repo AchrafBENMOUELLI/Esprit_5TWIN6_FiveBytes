@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreIncidentRequest;
 use App\Http\Requests\UpdateIncidentRequest;
 use App\Models\Incident\Incident;
+use App\Models\Incident\IncidentPhoto;
 use App\Models\Infrastructure\Infrastructure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +24,7 @@ class IncidentController extends Controller
         $this->authorize('viewAny', Incident::class);
 
         // Récupérer uniquement les incidents du citoyen connecté
-        $query = Incident::with(['technicien', 'infrastructure'])
+        $query = Incident::with(['technicien', 'infrastructure.zone'])
             ->where('citoyen_id', auth()->id());
 
         // Filtre par recherche
@@ -99,6 +100,19 @@ class IncidentController extends Controller
 
             $incident = Incident::create($data);
 
+            // Gérer l'upload des photos si présentes
+            if ($request->hasFile('photos')) {
+                foreach ($request->file('photos') as $photo) {
+                    $path = $photo->store("incidents/{$incident->id}", 'public');
+                    
+                    IncidentPhoto::create([
+                        'incident_id' => $incident->id,
+                        'chemin_fichier' => $path,
+                        'legende' => $request->legende,
+                    ]);
+                }
+            }
+
             DB::commit();
 
             return redirect()
@@ -122,7 +136,7 @@ class IncidentController extends Controller
         $this->authorize('view', $incident);
 
         // Charger les relations
-        $incident->load(['technicien', 'infrastructure', 'parent', 'doublons']);
+        $incident->load(['technicien', 'infrastructure.zone', 'parent', 'doublons', 'photos', 'comments.auteur', 'statusHistory.modificateur']);
 
         return view('front.incident.show', [
             'incident' => $incident,

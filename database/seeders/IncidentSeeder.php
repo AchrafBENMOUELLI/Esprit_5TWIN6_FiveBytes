@@ -7,6 +7,7 @@ use App\Enums\IncidentType;
 use App\Enums\IncidentUrgence;
 use App\Enums\UserRole;
 use App\Models\Incident\Incident;
+use App\Models\Incident\IncidentStatusHistory;
 use App\Models\Infrastructure\Infrastructure;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -225,15 +226,189 @@ class IncidentSeeder extends Seeder
         ];
 
         foreach ($incidents as $incidentData) {
-            Incident::create($incidentData);
+            // Générer manuellement la référence si elle n'est pas fournie
+            if (!isset($incidentData['reference'])) {
+                $incidentData['reference'] = $this->generateReference();
+            }
+
+            // Créer l'incident sans déclencher les observers
+            $incident = Incident::withoutEvents(function () use ($incidentData) {
+                return Incident::create($incidentData);
+            });
+
+            // Créer manuellement un historique cohérent selon le statut
+            $this->createStatusHistory($incident, $incidentData);
         }
 
-        $this->command->info('✅ 15 incidents réalistes créés');
+        $this->command->info('✅ 15 incidents réalistes créés avec historique cohérent');
         $this->command->info('   - 2 résolus');
         $this->command->info('   - 2 en cours');
         $this->command->info('   - 2 assignés');
         $this->command->info('   - 7 nouveaux (dont 3 critiques)');
         $this->command->info('   - 1 rejeté');
         $this->command->info('   - 1 doublon');
+    }
+
+    /**
+     * Génère une référence unique pour un incident
+     */
+    private function generateReference(): string
+    {
+        $year = now()->year;
+        $prefix = "INC-{$year}-";
+        
+        // Récupère le dernier incident de l'année
+        $lastIncident = Incident::where('reference', 'LIKE', $prefix . '%')
+            ->orderBy('reference', 'desc')
+            ->first();
+        
+        if ($lastIncident) {
+            // Extrait le numéro de la dernière référence
+            $lastNumber = (int) substr($lastIncident->reference, -4);
+            $newNumber = $lastNumber + 1;
+        } else {
+            $newNumber = 1;
+        }
+        
+        // Formate avec 4 chiffres (0001, 0002, etc.)
+        return $prefix . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Crée un historique de statut cohérent pour un incident
+     */
+    private function createStatusHistory(Incident $incident, array $incidentData): void
+    {
+        $citoyen_id = $incidentData['citoyen_id'];
+        $technicien_id = $incidentData['technicien_id'] ?? null;
+        $statut_final = $incidentData['statut'];
+        $created_at = $incidentData['created_at'];
+
+        $historyEntries = [];
+
+        // 1. Création de l'incident (toujours Nouveau au départ)
+        $historyEntries[] = [
+            'incident_id' => $incident->id,
+            'ancien_statut' => null,
+            'nouveau_statut' => IncidentStatut::Nouveau,
+            'modifie_par' => $citoyen_id,
+            'date_changement' => $created_at,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+
+        // 2. Transitions selon le statut final
+        switch ($statut_final) {
+            case IncidentStatut::Resolu:
+                // Nouveau → Assigné → En cours → Résolu
+                $historyEntries[] = [
+                    'incident_id' => $incident->id,
+                    'ancien_statut' => IncidentStatut::Nouveau,
+                    'nouveau_statut' => IncidentStatut::Assigne,
+                    'modifie_par' => $technicien_id,
+                    'date_changement' => $created_at->copy()->addHours(2),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                $historyEntries[] = [
+                    'incident_id' => $incident->id,
+                    'ancien_statut' => IncidentStatut::Assigne,
+                    'nouveau_statut' => IncidentStatut::EnCours,
+                    'modifie_par' => $technicien_id,
+                    'date_changement' => $created_at->copy()->addHours(6),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                $historyEntries[] = [
+                    'incident_id' => $incident->id,
+                    'ancien_statut' => IncidentStatut::EnCours,
+                    'nouveau_statut' => IncidentStatut::Resolu,
+                    'modifie_par' => $technicien_id,
+                    'date_changement' => $incidentData['date_resolution'] ?? $created_at->copy()->addDay(),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                break;
+
+            case IncidentStatut::EnCours:
+                // Nouveau → Assigné → En cours
+                $historyEntries[] = [
+                    'incident_id' => $incident->id,
+                    'ancien_statut' => IncidentStatut::Nouveau,
+                    'nouveau_statut' => IncidentStatut::Assigne,
+                    'modifie_par' => $technicien_id,
+                    'date_changement' => $created_at->copy()->addHours(3),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                $historyEntries[] = [
+                    'incident_id' => $incident->id,
+                    'ancien_statut' => IncidentStatut::Assigne,
+                    'nouveau_statut' => IncidentStatut::EnCours,
+                    'modifie_par' => $technicien_id,
+                    'date_changement' => $created_at->copy()->addHours(8),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                break;
+
+            case IncidentStatut::Assigne:
+                // Nouveau → Assigné
+                $historyEntries[] = [
+                    'incident_id' => $incident->id,
+                    'ancien_statut' => IncidentStatut::Nouveau,
+                    'nouveau_statut' => IncidentStatut::Assigne,
+                    'modifie_par' => $technicien_id,
+                    'date_changement' => $created_at->copy()->addHours(4),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                break;
+
+            case IncidentStatut::Rejete:
+                // Nouveau → Assigné → Rejeté
+                $historyEntries[] = [
+                    'incident_id' => $incident->id,
+                    'ancien_statut' => IncidentStatut::Nouveau,
+                    'nouveau_statut' => IncidentStatut::Assigne,
+                    'modifie_par' => $technicien_id,
+                    'date_changement' => $created_at->copy()->addHours(2),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                $historyEntries[] = [
+                    'incident_id' => $incident->id,
+                    'ancien_statut' => IncidentStatut::Assigne,
+                    'nouveau_statut' => IncidentStatut::Rejete,
+                    'modifie_par' => $technicien_id,
+                    'date_changement' => $created_at->copy()->addHours(5),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                break;
+
+            case IncidentStatut::Doublon:
+                // Nouveau → Doublon
+                $historyEntries[] = [
+                    'incident_id' => $incident->id,
+                    'ancien_statut' => IncidentStatut::Nouveau,
+                    'nouveau_statut' => IncidentStatut::Doublon,
+                    'modifie_par' => $technicien_id,
+                    'date_changement' => $created_at->copy()->addHours(1),
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+                break;
+
+            case IncidentStatut::Nouveau:
+            default:
+                // Reste au statut Nouveau (déjà créé)
+                break;
+        }
+
+        // Insérer tous les entrées d'historique
+        if (count($historyEntries) > 0) {
+            IncidentStatusHistory::insert($historyEntries);
+        }
     }
 }
