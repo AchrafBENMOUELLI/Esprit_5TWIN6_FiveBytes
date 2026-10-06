@@ -13,10 +13,6 @@ Route::get('/register', fn () => view('components.authentification.registercompo
     ->middleware('guest')
     ->name('register');
 
-Route::get('/drought', fn () => view('drought.index'))
-    ->middleware('auth')
-    ->name('drought');
-
 Route::get('/dashboard', function (Request $request) {
     if ($request->user()->role === UserRole::Citoyen) {
         return redirect('/');
@@ -26,3 +22,13 @@ Route::get('/dashboard', function (Request $request) {
 })->middleware('auth')->name('dashboard');
 
 require __DIR__.'/auth.php';
+require __DIR__.'/admin.php';
+require __DIR__.'/front.php';
+
+// Simple test interface for Gestion 4
+Route::get('/drought', function () {
+    if (!auth()->check()) {
+        return redirect('/login');
+    }
+    return view('drought.index');
+})->middleware('auth')->name('drought.test');
