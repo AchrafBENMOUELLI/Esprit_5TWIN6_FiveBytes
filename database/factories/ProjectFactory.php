@@ -45,7 +45,7 @@ class ProjectFactory extends Factory
     /**
      * Types de projets disponibles
      */
-    private static $types = ['rénovation', 'décontamination', 'extension', 'modernisation'];
+    private static $types = ['réparation', 'modernisation', 'extension', 'construction'];
 
     /**
      * Statuts de projets avec probabilités
@@ -92,8 +92,8 @@ class ProjectFactory extends Factory
         $budget = match($type) {
             'extension' => fake()->randomFloat(2, 100000, 500000),
             'modernisation' => fake()->randomFloat(2, 50000, 300000),
-            'décontamination' => fake()->randomFloat(2, 30000, 200000),
-            'rénovation' => fake()->randomFloat(2, 20000, 250000),
+            'construction' => fake()->randomFloat(2, 150000, 600000),
+            'réparation' => fake()->randomFloat(2, 20000, 250000),
         };
 
         // 50% de chance d'avoir une infrastructure liée
@@ -122,15 +122,17 @@ class ProjectFactory extends Factory
     private function generateDescription(string $type): string
     {
         $descriptions = [
-            'rénovation' => [
-                'Rénovation complète des canalisations vétustes du secteur. Remplacement des tuyaux en fonte par des conduites modernes en PVC haute résistance.',
+            'réparation' => [
+                'Réparation complète des canalisations vétustes du secteur. Remplacement des tuyaux en fonte par des conduites modernes en PVC haute résistance.',
                 'Travaux de réfection du réseau d\'eau potable incluant le remplacement des vannes défectueuses et la mise aux normes des raccordements.',
                 'Réhabilitation du réseau avec technique sans tranchée pour minimiser les perturbations. Pose de nouvelles canalisations PEHD.',
+                'Réparation urgente des fuites détectées sur le réseau principal. Remplacement des sections endommagées et tests d\'étanchéité.',
             ],
-            'décontamination' => [
-                'Opération de décontamination et de nettoyage approfondi du réservoir. Élimination des dépôts et désinfection complète selon les normes en vigueur.',
-                'Traitement de décontamination suite à la détection de traces de plomb. Remplacement des sections concernées et analyses régulières.',
-                'Décontamination bactériologique du réseau suite aux analyses. Chloration intensive et rinçage complet du système.',
+            'construction' => [
+                'Construction d\'une nouvelle station de pompage pour améliorer la distribution d\'eau. Installation complète des équipements et raccordement au réseau.',
+                'Construction d\'un nouveau réservoir d\'eau potable de 500m³. Génie civil complet et mise en place du système de régulation.',
+                'Construction d\'une station de traitement moderne avec technologies de filtration avancées. Mise en conformité avec les normes européennes.',
+                'Construction d\'une nouvelle infrastructure de captage et traitement d\'eau. Forage, équipements de pompage et système de contrôle.',
             ],
             'extension' => [
                 'Extension du réseau d\'eau potable pour desservir les nouveaux lotissements. Pose de 2 km de canalisations et installation de 3 bornes incendie.',

@@ -31,7 +31,7 @@ class UpdateProjectRequest extends FormRequest
             'statut' => ['required', 'in:planifié,en_cours,suspendu,terminé,annulé'],
             'avancement_pourcentage' => ['nullable', 'integer', 'min:0', 'max:100'],
             'zone_id' => ['required', 'exists:zones,id'],
-            'infrastructure_id' => ['required', 'exists:infrastructures,id'],
+            'infrastructure_id' => ['nullable', 'exists:infrastructures,id'],
             'responsable_id' => ['required', 'exists:users,id'],
         ];
     }
@@ -87,8 +87,6 @@ class UpdateProjectRequest extends FormRequest
             
             // Infrastructure
             'infrastructure_id.exists' => 'L\'infrastructure sélectionnée n\'existe pas.',
-            
-            // Responsable
             'responsable_id.required' => 'Le responsable du projet est obligatoire.',
             'responsable_id.exists' => 'Le responsable sélectionné n\'existe pas.',
         ];
