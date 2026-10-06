@@ -19,7 +19,7 @@ class StoreWaterLevelRequest extends FormRequest
             'source' => 'required|in:reservoir,nappe,barrage',
             'niveau_pourcentage' => 'required|numeric|between:0,100',
             'volume_m3' => 'required|numeric|min:0',
-            'date_releve' => 'required|date_format:Y-m-d\TH:i|before_or_equal:now',
+            'date_releve' => 'required|date_format:Y-m-d\TH:i',
         ];
     }
 

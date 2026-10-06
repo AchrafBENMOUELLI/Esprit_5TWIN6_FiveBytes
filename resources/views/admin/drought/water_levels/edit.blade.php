@@ -56,7 +56,7 @@
 
         <div class="aq-form-group">
             <label for="date_releve">Date du Relevé *</label>
-            <input type="datetime-local" id="date_releve" name="date_releve" value="{{ old('date_releve', $waterLevel->date_releve->format('Y-m-d H:i')) }}" required>
+            <input type="datetime-local" id="date_releve" name="date_releve" value="{{ old('date_releve', $waterLevel->date_releve->format('Y-m-d\TH:i')) }}" required>
             @error('date_releve')
                 <div class="aq-error">{{ $message }}</div>
             @enderror
