@@ -63,7 +63,7 @@
     @endif
 
     <div style="margin-top: 2rem;">
-        <a href="{{ route('front.drought.dashboard') }}" class="aq-btn aq-btn-secondary">Retour au tableau de bord</a>
+        <a href="{{ route('dashboard', ['module' => 'drought']) }}" class="aq-btn aq-btn-secondary">← Retour</a>
         <a href="{{ route('front.drought.subscriptions') }}" class="aq-btn aq-btn-info">S'abonner aux alertes</a>
     </div>
 </div>

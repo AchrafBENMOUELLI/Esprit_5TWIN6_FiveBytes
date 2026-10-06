@@ -59,7 +59,7 @@
     @endif
 
     <div style="margin-top: 2rem;">
-        <a href="{{ route('drought.test') }}" class="aq-btn aq-btn-secondary">← Retour</a>
+        <a href="{{ route('dashboard', ['module' => 'drought']) }}" class="aq-btn aq-btn-secondary">← Retour</a>
     </div>
 </div>
 @endsection

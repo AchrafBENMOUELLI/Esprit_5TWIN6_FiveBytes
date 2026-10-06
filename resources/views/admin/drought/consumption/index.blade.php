@@ -13,7 +13,7 @@
         <a href="{{ route('admin.drought.consumption.create') }}" class="aq-btn aq-btn-primary">
             + Enregistrer une lecture
         </a>
-        <a href="{{ route('drought.test') }}" class="aq-btn aq-btn-secondary">← Retour</a>
+        <a href="{{ route('dashboard', ['module' => 'drought']) }}" class="aq-btn aq-btn-secondary">← Retour</a>
     </div>
 
     @if($readings->count())

@@ -43,6 +43,9 @@ class DroughtController extends Controller
     {
         $cuts = ScheduledCut::where('fin', '>=', now())
             ->with(['zone', 'restriction'])
+            ->whereHas('zone', function($query) {
+                $query->whereIn('nom', ['Tunis', 'Bizerte']);
+            })
             ->orderBy('debut')
             ->paginate(15);
 

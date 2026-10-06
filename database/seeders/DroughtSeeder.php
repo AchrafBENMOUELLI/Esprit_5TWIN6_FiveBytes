@@ -15,26 +15,31 @@ class DroughtSeeder extends Seeder
 {
     public function run(): void
     {
-        // Get or create zones
-        $zones = Zone::all();
-        if ($zones->isEmpty()) {
-            $zones = Zone::factory(3)->create();
+        // Create all 24 Tunisian regions
+        if (Zone::count() == 0) {
+            Zone::factory(24)->create();
         }
+
+        // Get all zones (includes all 24 regions)
+        $allZones = Zone::all();
 
         // Get or create users
         $manager = User::whereRole('gestionnaire')->first() ?? User::factory()->create(['role' => 'gestionnaire']);
         $users = User::all();
 
-        // Create water levels for each zone
-        foreach ($zones as $zone) {
+        // Get only Tunis and Bizerte for demo purposes
+        $demoZones = $allZones->whereIn('nom', ['Tunis', 'Bizerte']);
+
+        // Create water levels for demo zones only
+        foreach ($demoZones as $zone) {
             WaterLevel::factory(5)
                 ->for($zone)
                 ->create();
         }
 
-        // Create restrictions
+        // Create restrictions for demo zones only
         $restrictions = Restriction::factory(5)
-            ->for(Zone::inRandomOrder()->first())
+            ->for($demoZones->random())
             ->for($manager, 'createur')
             ->create();
 
@@ -46,19 +51,19 @@ class DroughtSeeder extends Seeder
                 ->create();
         }
 
-        // Create consumption readings
-        foreach ($zones as $zone) {
+        // Create consumption readings for demo zones only
+        foreach ($demoZones as $zone) {
             ConsumptionReading::factory(10)
                 ->for($zone)
                 ->create();
         }
 
-        // Create subscriptions for citizens
+        // Create subscriptions for citizens with demo zones only
         $citizens = $users->filter(fn($u) => $u->role === 'citoyen')->take(5);
         foreach ($citizens as $citizen) {
             Subscription::factory(2)
                 ->for($citizen)
-                ->for(Zone::inRandomOrder()->first())
+                ->for($demoZones->random())
                 ->create();
         }
     }
