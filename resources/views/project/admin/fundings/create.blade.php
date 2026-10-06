@@ -13,6 +13,21 @@
     ]">
 
 <div class="container-fluid py-4">
+    {{-- Validation Errors Alert --}}
+    @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 12px; border-left: 4px solid #ef4444;">
+            <h6 style="font-weight: 700; margin-bottom: 12px;">
+                <i class="fas fa-exclamation-circle" style="margin-right: 8px;"></i>Erreurs de validation
+            </h6>
+            <ul style="margin-bottom: 0; padding-left: 20px;">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     {{-- En-tête avec contexte du projet --}}
     <div class="mb-4">
         <nav aria-label="breadcrumb">
@@ -48,7 +63,7 @@
                     <div class="col-md-6">
                         <div class="text-muted small mb-1">Taux de financement</div>
                         @php
-                            $tauxFinancement = $project->budget_prevu > 0 ? ($project->fundingTotal() / $project->budget_prevu) * 100 : 0;
+                            $tauxFinancement = $project->fundingRate();
                         @endphp
                         <div class="progress" style="height: 25px;">
                             <div class="progress-bar bg-success" 
@@ -58,7 +73,7 @@
                             </div>
                         </div>
                         <small class="text-muted">
-                            Restant: {{ number_format($project->budgetRemaining(), 0, ',', ' ') }} €
+                            Restant à financer: {{ number_format($project->budgetRemaining(), 0, ',', ' ') }} €
                         </small>
                     </div>
                 </div>
@@ -66,7 +81,7 @@
         </div>
     </div>
 
-    <form action="{{ route('admin.projects.funding.store', $project) }}" method="POST" class="needs-validation" novalidate>
+    <form action="{{ route('admin.projects.funding.store', $project) }}" method="POST">
         @csrf
         <input type="hidden" name="project_id" value="{{ $project->id }}">
 
@@ -88,8 +103,7 @@
                             </label>
                             <select class="form-select @error('source') is-invalid @enderror" 
                                     id="source" 
-                                    name="source"
-                                    required>
+                                    name="source">
                                 <option value="">Sélectionner une source</option>
                                 <option value="municipal" {{ old('source') === 'municipal' ? 'selected' : '' }}>
                                     🏛️ Municipal
@@ -183,17 +197,15 @@
                                        name="montant" 
                                        value="{{ old('montant') }}"
                                        step="0.01"
-                                       min="0"
-                                       max="{{ $project->budgetRemaining() }}"
-                                       required>
+                                       min="0">
                                 <span class="input-group-text">€</span>
-                                @error('montant')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
                             </div>
+                            @error('montant')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
                             <div class="form-text" id="montant-info">
                                 <i class="fas fa-calculator me-1"></i>
-                                Budget restant: <strong>{{ number_format($project->budgetRemaining(), 0, ',', ' ') }} €</strong>
+                                Restant à financer: <strong>{{ number_format($project->budgetRemaining(), 0, ',', ' ') }} €</strong>
                             </div>
                         </div>
 
@@ -206,9 +218,7 @@
                                    class="form-control @error('date_versement') is-invalid @enderror" 
                                    id="date_versement" 
                                    name="date_versement" 
-                                   value="{{ old('date_versement', date('Y-m-d')) }}"
-                                   max="{{ date('Y-m-d') }}"
-                                   required>
+                                   value="{{ old('date_versement', date('Y-m-d')) }}">
                             @error('date_versement')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
@@ -255,34 +265,16 @@
 
 @push('scripts')
 <script>
-    // Validation HTML5
-    (function () {
-        'use strict'
-        var forms = document.querySelectorAll('.needs-validation')
-        Array.prototype.slice.call(forms).forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
-                form.classList.add('was-validated')
-            }, false)
-        })
-    })()
-
-    // Toggle donateur field based on source
+    // Server-side validation only - Toggle donateur field based on source
     const sourceSelect = document.getElementById('source');
     const donateurGroup = document.getElementById('donateur-group');
-    const donateurSelect = document.getElementById('donateur_id');
 
     function toggleDonateurField() {
         if (sourceSelect.value === 'don') {
             donateurGroup.style.display = 'block';
-            donateurSelect.required = true;
         } else {
             donateurGroup.style.display = 'none';
-            donateurSelect.required = false;
-            donateurSelect.value = '';
+            document.getElementById('donateur_id').value = '';
         }
     }
 
@@ -290,35 +282,6 @@
     
     // Trigger on page load
     toggleDonateurField();
-
-    // Validation du montant en temps réel
-    const montantInput = document.getElementById('montant');
-    const montantInfo = document.getElementById('montant-info');
-    const budgetRestant = {{ $project->budgetRemaining() }};
-
-    montantInput.addEventListener('input', function() {
-        const montant = parseFloat(this.value) || 0;
-        const restantApres = budgetRestant - montant;
-        
-        if (montant > budgetRestant) {
-            montantInfo.innerHTML = '<i class="fas fa-exclamation-triangle text-danger me-1"></i> <span class="text-danger">Le montant dépasse le budget restant!</span>';
-            this.setCustomValidity('Le montant ne peut pas dépasser le budget restant');
-        } else {
-            montantInfo.innerHTML = '<i class="fas fa-calculator me-1"></i> Budget restant: <strong>' + budgetRestant.toLocaleString('fr-FR') + ' €</strong> | Après ce financement: <strong class="text-' + (restantApres >= 0 ? 'success' : 'danger') + '">' + restantApres.toLocaleString('fr-FR') + ' €</strong>';
-            this.setCustomValidity('');
-        }
-    });
-
-    // Calculer le pourcentage de financement
-    montantInput.addEventListener('blur', function() {
-        const montant = parseFloat(this.value) || 0;
-        const budgetTotal = {{ $project->budget_prevu }};
-        const pourcentage = (montant / budgetTotal * 100).toFixed(2);
-        
-        if (montant > 0) {
-            console.log('Ce financement représente ' + pourcentage + '% du budget total');
-        }
-    });
 </script>
 @endpush
 

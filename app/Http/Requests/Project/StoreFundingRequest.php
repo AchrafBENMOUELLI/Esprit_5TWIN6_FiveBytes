@@ -25,8 +25,9 @@ class StoreFundingRequest extends FormRequest
             'project_id' => ['required', 'exists:projects,id'],
             'source' => ['required', 'in:municipal,régional,fédéral,européen,privé,don'],
             'donateur_id' => ['required_if:source,don', 'nullable', 'exists:users,id'],
-            'montant' => ['required', 'numeric', 'min:1'],
-            'date_versement' => ['required', 'date'],
+            'montant' => ['required', 'numeric', 'min:1', 'max:99999999'],
+            'date_versement' => ['required', 'date', 'before_or_equal:today'],
+            'description' => ['nullable', 'string'],
         ];
     }
 
@@ -58,6 +59,10 @@ class StoreFundingRequest extends FormRequest
             // Date versement
             'date_versement.required' => 'La date de versement est obligatoire.',
             'date_versement.date' => 'La date de versement doit être une date valide.',
+            'date_versement.before_or_equal' => 'La date de versement ne peut pas être dans le futur.',
+            
+            // Description
+            'description.string' => 'La description doit être une chaîne de caractères.',
         ];
     }
 
@@ -86,9 +91,25 @@ class StoreFundingRequest extends FormRequest
     public function withValidator($validator)
     {
         $validator->after(function ($validator) {
-            // Vérification supplémentaire : si source n'est pas 'don', donateur_id doit être null
+            // Vérification: si source n'est pas 'don', donateur_id doit être null
             if ($this->source !== 'don' && $this->donateur_id !== null) {
                 $validator->errors()->add('donateur_id', 'Un donateur ne peut être spécifié que pour un don.');
+            }
+            
+            // Vérification SERVER-SIDE: le montant ne doit pas dépasser le budget restant
+            if ($this->project_id && $this->montant) {
+                $project = \App\Models\Project\Project::find($this->project_id);
+                if ($project) {
+                    $budgetRestant = $project->budgetRemaining();
+                    
+                    // Permettre un dépassement de 0.01€ pour les erreurs d'arrondi
+                    if ($this->montant > ($budgetRestant + 0.01)) {
+                        $validator->errors()->add('montant', 
+                            'Le montant (' . number_format($this->montant, 2, ',', ' ') . ' €) dépasse le budget restant (' . 
+                            number_format($budgetRestant, 2, ',', ' ') . ' €).'
+                        );
+                    }
+                }
             }
         });
     }

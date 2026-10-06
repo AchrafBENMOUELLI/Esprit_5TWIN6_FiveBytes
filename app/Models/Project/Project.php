@@ -123,11 +123,23 @@ class Project extends Model
     }
 
     /**
-     * Calculate the remaining budget (funding - phases cost).
+     * Calculate the remaining budget to be funded (budget prévu - funding already received).
+     * This represents how much more funding is needed.
      *
      * @return float
      */
     public function budgetRemaining(): float
+    {
+        return (float) $this->budget_prevu - $this->fundingTotal();
+    }
+
+    /**
+     * Calculate the budget balance (funding - phases cost).
+     * Positive means we have more funding than spent, negative means deficit.
+     *
+     * @return float
+     */
+    public function budgetBalance(): float
     {
         return $this->fundingTotal() - $this->budgetTotal();
     }
@@ -160,5 +172,18 @@ class Project extends Model
     public function isFullyFunded(): bool
     {
         return $this->fundingTotal() >= (float) $this->budget_prevu;
+    }
+
+    /**
+     * Get the funding rate as a percentage.
+     *
+     * @return float
+     */
+    public function fundingRate(): float
+    {
+        if ($this->budget_prevu <= 0) {
+            return 0;
+        }
+        return ($this->fundingTotal() / (float) $this->budget_prevu) * 100;
     }
 }
