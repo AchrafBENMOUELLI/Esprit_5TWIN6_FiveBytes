@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('source'); // reservoir, nappe, barrage
             $table->decimal('niveau_pourcentage', 5, 2); // 0-100%
             $table->decimal('volume_m3', 15, 2);
-            $table->timestamp('date_releve');
+            $table->dateTime('date_releve');
             $table->timestamps();
             
             $table->index('zone_id');

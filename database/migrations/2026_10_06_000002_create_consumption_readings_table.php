@@ -12,8 +12,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('zone_id')->constrained('zones')->cascadeOnDelete();
             $table->decimal('volume_m3', 15, 2);
-            $table->timestamp('periode_debut');
-            $table->timestamp('periode_fin');
+            $table->dateTime('periode_debut');
+            $table->dateTime('periode_fin');
             $table->text('prevision_ia')->nullable();
             $table->timestamps();
             

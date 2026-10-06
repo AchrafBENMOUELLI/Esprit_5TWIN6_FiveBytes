@@ -12,8 +12,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('restriction_id')->constrained('restrictions')->cascadeOnDelete();
             $table->foreignId('zone_id')->constrained('zones')->cascadeOnDelete();
-            $table->timestamp('debut');
-            $table->timestamp('fin');
+            $table->dateTime('debut');
+            $table->dateTime('fin');
             $table->text('motif')->nullable();
             $table->timestamps();
             

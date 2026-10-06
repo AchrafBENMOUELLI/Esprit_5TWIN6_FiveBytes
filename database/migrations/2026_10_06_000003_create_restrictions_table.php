@@ -13,8 +13,8 @@ return new class extends Migration
             $table->string('titre');
             $table->enum('niveau', ['vigilance', 'alerte', 'crise'])->default('vigilance');
             $table->text('description');
-            $table->timestamp('date_debut');
-            $table->timestamp('date_fin')->nullable();
+            $table->dateTime('date_debut');
+            $table->dateTime('date_fin')->nullable();
             $table->foreignId('zone_id')->constrained('zones')->cascadeOnDelete();
             $table->foreignId('cree_par')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
