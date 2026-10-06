@@ -11,14 +11,6 @@ use Illuminate\Http\Request;
 class ContractorController extends Controller
 {
     /**
-     * Constructeur avec middleware d'authentification
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
      * Afficher la liste des entrepreneurs avec recherche.
      */
     public function index(Request $request)
@@ -42,7 +34,7 @@ class ContractorController extends Controller
 
         $contractors = $query->orderBy('nom')->paginate(15);
 
-        return view('components.project.admin.contractors.index', compact('contractors'));
+        return view('project.admin.contractors.index', compact('contractors'));
     }
 
     /**
@@ -50,7 +42,7 @@ class ContractorController extends Controller
      */
     public function create()
     {
-        return view('components.project.admin.contractors.create');
+        return view('project.admin.contractors.create');
     }
 
     /**
@@ -61,7 +53,7 @@ class ContractorController extends Controller
         $contractor = Contractor::create($request->validated());
 
         return redirect()
-            ->route('admin.contractor.index')
+            ->route('admin.contractors.index')
             ->with('success', 'L\'entrepreneur "' . $contractor->nom . '" a été créé avec succès.');
     }
 
@@ -72,7 +64,7 @@ class ContractorController extends Controller
     {
         $contractor->load(['projectPhases.project']);
         
-        return view('components.project.admin.contractors.show', compact('contractor'));
+        return view('project.admin.contractors.show', compact('contractor'));
     }
 
     /**
@@ -80,7 +72,7 @@ class ContractorController extends Controller
      */
     public function edit(Contractor $contractor)
     {
-        return view('components.project.admin.contractors.edit', compact('contractor'));
+        return view('project.admin.contractors.edit', compact('contractor'));
     }
 
     /**
@@ -91,7 +83,7 @@ class ContractorController extends Controller
         $contractor->update($request->validated());
 
         return redirect()
-            ->route('admin.contractor.show', $contractor)
+            ->route('admin.contractors.show', $contractor)
             ->with('success', 'L\'entrepreneur "' . $contractor->nom . '" a été mis à jour avec succès.');
     }
 
@@ -105,7 +97,7 @@ class ContractorController extends Controller
 
         if ($phasesCount > 0) {
             return redirect()
-                ->route('admin.contractor.show', $contractor)
+                ->route('admin.contractors.show', $contractor)
                 ->with('error', 'Impossible de supprimer cet entrepreneur car il est associé à ' . $phasesCount . ' phase(s) de projet. Veuillez d\'abord les réassigner ou les supprimer.');
         }
 
@@ -113,7 +105,7 @@ class ContractorController extends Controller
         $contractor->delete();
 
         return redirect()
-            ->route('admin.contractor.index')
+            ->route('admin.contractors.index')
             ->with('success', 'L\'entrepreneur "' . $nom . '" a été supprimé avec succès.');
     }
 }

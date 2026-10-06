@@ -1,414 +1,407 @@
-@php
-use Carbon\Carbon;
-@endphp
-
-<x-project.layouts.admin 
-    title="{{ $project->titre }}"
+<x-project.layouts.admin
+    title="Détails du Projet"
     :breadcrumbs="[
-        ['label' => 'Tableau de bord', 'url' => route('admin.dashboard')],
+        ['label' => 'Tableau de bord', 'url' => route('dashboard')],
         ['label' => 'Projets', 'url' => route('admin.projects.index')],
-        ['label' => $project->titre, 'url' => null]
+        ['label' => 'Détails', 'url' => null]
     ]">
 
-    {{-- En-tête du projet --}}
-    <div class="aq-card">
-        <div class="aq-card-header">
-            <div>
-                <h2 class="aq-card-title">{{ $project->titre }}</h2>
-                <p class="aq-card-subtitle">
-                    @php
-                        $badgeClass = match($project->statut) {
-                            'planifié' => 'aq-badge-secondary',
-                            'en_cours' => 'aq-badge-primary',
-                            'terminé' => 'aq-badge-success',
-                            'suspendu' => 'aq-badge-warning',
-                            'annulé' => 'aq-badge-danger',
-                            default => 'aq-badge-secondary'
-                        };
-                    @endphp
-                    <span class="aq-badge {{ $badgeClass }}">
-                        {{ ucfirst(str_replace('_', ' ', $project->statut)) }}
-                    </span>
-                    <span class="aq-badge aq-badge-info">{{ ucfirst($project->type) }}</span>
-                </p>
+<div class="container-fluid py-4">
+    {{-- Header --}}
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <div class="d-flex align-items-center mb-2">
+                <div class="rounded-2 bg-primary bg-opacity-10 p-2 me-3">
+                    <i class="fas fa-folder-open fa-2x text-primary"></i>
+                </div>
+                <div>
+                    <h2 class="fw-bold mb-1" style="color: #1a237e;">{{ $project->titre }}</h2>
+                    <p class="text-muted mb-0">
+                        <span class="badge bg-light text-primary border border-primary border-opacity-25 me-2">
+                            {{ ucfirst($project->type) }}
+                        </span>
+                        @php
+                            $statusBadge = match($project->statut) {
+                                'planifié' => 'bg-secondary',
+                                'en_cours' => 'bg-primary',
+                                'terminé' => 'bg-success',
+                                'suspendu' => 'bg-warning',
+                                'annulé' => 'bg-danger',
+                                default => 'bg-secondary'
+                            };
+                        @endphp
+                        <span class="badge {{ $statusBadge }}">
+                            {{ ucfirst(str_replace('_', ' ', $project->statut)) }}
+                        </span>
+                    </p>
+                </div>
             </div>
-            <div class="aq-actions">
-                <a href="{{ route('admin.projects.edit', $project) }}" class="aq-btn aq-btn-primary">
-                    <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                    </svg>
-                    Modifier
-                </a>
-                <a href="{{ route('admin.projects.index') }}" class="aq-btn aq-btn-outline">
-                    Retour à la liste
-                </a>
+        </div>
+        <div class="btn-group">
+            <a href="{{ route('admin.projects.edit', $project) }}" class="btn btn-outline-primary">
+                <i class="fas fa-edit me-2"></i>Modifier
+            </a>
+            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                <i class="fas fa-trash me-2"></i>Supprimer
+            </button>
+            <a href="{{ route('admin.projects.index') }}" class="btn btn-outline-secondary">
+                Retour
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {{-- Informations Générales --}}
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="fas fa-info-circle me-2 text-primary"></i>Informations Générales
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="text-muted small mb-1">Description</label>
+                            <p class="mb-0">{{ $project->description }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-muted small mb-1">Responsable</label>
+                            <p class="mb-0 fw-medium">
+                                <i class="fas fa-user me-2 text-primary"></i>{{ $project->responsable->name ?? 'Non assigné' }}
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-muted small mb-1">Zone</label>
+                            <p class="mb-0 fw-medium">
+                                <i class="fas fa-map-marker-alt me-2 text-danger"></i>{{ $project->zone->nom ?? 'N/A' }}
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-muted small mb-1">Infrastructure</label>
+                            <p class="mb-0 fw-medium">
+                                <i class="fas fa-building me-2 text-secondary"></i>{{ $project->infrastructure->nom ?? 'N/A' }}
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="text-muted small mb-1">Dates</label>
+                            <p class="mb-0">
+                                {{ \Carbon\Carbon::parse($project->date_debut)->format('d/m/Y') }} → 
+                                {{ \Carbon\Carbon::parse($project->date_fin_prevue)->format('d/m/Y') }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Phases --}}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="fas fa-tasks me-2 text-primary"></i>Phases du Projet
+                    </h5>
+                    <span class="badge bg-light text-primary">{{ $project->projectPhases->count() }} phase(s)</span>
+                </div>
+                <div class="card-body p-0">
+                    @if($project->projectPhases->count() > 0)
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Nom</th>
+                                        <th>Date Début</th>
+                                        <th>Date Fin</th>
+                                        <th>Coût</th>
+                                        <th>Avancement</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($project->projectPhases as $phase)
+                                        <tr>
+                                            <td class="fw-medium">{{ $phase->nom }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($phase->date_debut)->format('d/m/Y') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($phase->date_fin)->format('d/m/Y') }}</td>
+                                            <td>{{ number_format($phase->cout, 0, ',', ' ') }} €</td>
+                                            <td>
+                                                <div class="progress" style="height: 6px;">
+                                                    <div class="progress-bar bg-primary" style="width: {{ $phase->avancement }}%"></div>
+                                                </div>
+                                                <small>{{ $phase->avancement }}%</small>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="btn-group">
+                                                    <a href="{{ route('admin.phases.edit', $phase) }}" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <form action="{{ route('admin.phases.destroy', $phase) }}" method="POST" style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer cette phase ?')">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                <tfoot class="table-light">
+                                    <tr>
+                                        <td colspan="3" class="fw-bold">Total</td>
+                                        <td class="fw-bold">{{ number_format($project->projectPhases->sum('cout'), 0, ',', ' ') }} €</td>
+                                        <td colspan="2"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    @else
+                        <div class="text-center py-5">
+                            <i class="fas fa-tasks fa-3x text-muted opacity-25 mb-3"></i>
+                            <p class="text-muted">Aucune phase définie</p>
+                            <a href="{{ route('admin.projects.phase.create', $project) }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus me-2"></i>Ajouter une phase
+                            </a>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Financements --}}
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="fas fa-euro-sign me-2 text-primary"></i>Financements
+                    </h5>
+                    <span class="badge bg-light text-primary">{{ $project->fundings->count() }} source(s)</span>
+                </div>
+                <div class="card-body p-0">
+                    @if($project->fundings->count() > 0)
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Source</th>
+                                        <th>Type</th>
+                                        <th>Montant</th>
+                                        <th>Statut</th>
+                                        <th class="text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($project->fundings as $funding)
+                                        <tr>
+                                            <td class="fw-medium">{{ $funding->source }}</td>
+                                            <td>{{ ucfirst($funding->type) }}</td>
+                                            <td>{{ number_format($funding->montant, 0, ',', ' ') }} €</td>
+                                            <td>
+                                                @php
+                                                    $fundingBadge = match($funding->statut) {
+                                                        'en_attente' => 'bg-warning',
+                                                        'approuvé' => 'bg-success',
+                                                        'rejeté' => 'bg-danger',
+                                                        default => 'bg-secondary'
+                                                    };
+                                                @endphp
+                                                <span class="badge {{ $fundingBadge }}">{{ ucfirst(str_replace('_', ' ', $funding->statut)) }}</span>
+                                            </td>
+                                            <td class="text-end">
+                                                <div class="btn-group">
+                                                    @if($funding->statut === 'en_attente')
+                                                        <form action="{{ route('admin.fundings.approve', $funding) }}" method="POST" style="display: inline;">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" class="btn btn-sm btn-outline-success">
+                                                                <i class="fas fa-check"></i>
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ route('admin.fundings.reject', $funding) }}" method="POST" style="display: inline;">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                                <i class="fas fa-times"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                    <a href="{{ route('admin.fundings.edit', $funding) }}" class="btn btn-sm btn-outline-primary">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <form action="{{ route('admin.fundings.destroy', $funding) }}" method="POST" style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ce financement ?')">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                <tfoot class="table-light">
+                                    <tr>
+                                        <td colspan="2" class="fw-bold">Total</td>
+                                        <td class="fw-bold">{{ number_format($project->fundings->sum('montant'), 0, ',', ' ') }} €</td>
+                                        <td colspan="2"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    @else
+                        <div class="text-center py-5">
+                            <i class="fas fa-euro-sign fa-3x text-muted opacity-25 mb-3"></i>
+                            <p class="text-muted">Aucun financement enregistré</p>
+                            <a href="{{ route('admin.projects.funding.create', $project) }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus me-2"></i>Ajouter un financement
+                            </a>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            {{-- Documents --}}
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="fas fa-file-alt me-2 text-primary"></i>Documents
+                    </h5>
+                    <span class="badge bg-light text-primary">{{ $project->projectDocuments->count() }} document(s)</span>
+                </div>
+                <div class="card-body">
+                    @if($project->projectDocuments->count() > 0)
+                        <div class="row g-3">
+                            @foreach($project->projectDocuments as $document)
+                                <div class="col-md-4">
+                                    <div class="card border-0 bg-light">
+                                        <div class="card-body text-center">
+                                            <i class="fas fa-file-pdf fa-3x text-danger mb-2"></i>
+                                            <h6 class="fw-semibold mb-1">{{ $document->titre }}</h6>
+                                            <small class="text-muted d-block mb-2">{{ Str::limit($document->description, 40) }}</small>
+                                            <div class="btn-group w-100">
+                                                <a href="{{ Storage::url($document->chemin_fichier) }}" class="btn btn-sm btn-outline-primary flex-grow-1" download>
+                                                    <i class="fas fa-download"></i>
+                                                </a>
+                                                <form action="{{ route('admin.documents.destroy', $document) }}" method="POST" style="display: inline;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Supprimer ce document ?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center py-5">
+                            <i class="fas fa-file-alt fa-3x text-muted opacity-25 mb-3"></i>
+                            <p class="text-muted">Aucun document attaché</p>
+                            <a href="{{ route('admin.projects.document.create', $project) }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-plus me-2"></i>Ajouter un document
+                            </a>
+                        </div>
+                    @endif
+                </div>
             </div>
         </div>
 
-        {{-- Informations générales --}}
-        <div class="aq-grid-3">
-            <div>
-                <h3 style="font-size: 0.875rem; font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">Zone</h3>
-                <p>{{ $project->zone->nom ?? 'Non définie' }}</p>
+        {{-- Sidebar Info --}}
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="fas fa-chart-pie me-2 text-primary"></i>Budget
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="text-muted small">Budget Prévu</label>
+                        <h3 class="fw-bold text-primary">{{ number_format($project->budget_prevu, 0, ',', ' ') }} €</h3>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted small">Financement Total</label>
+                        <h3 class="fw-bold text-success">{{ number_format($project->fundingTotal(), 0, ',', ' ') }} €</h3>
+                    </div>
+                    <div class="mb-3">
+                        <label class="text-muted small">Reste à Financer</label>
+                        <h3 class="fw-bold text-warning">{{ number_format(max(0, $project->budget_prevu - $project->fundingTotal()), 0, ',', ' ') }} €</h3>
+                    </div>
+                    <div class="progress" style="height: 10px;">
+                        <div class="progress-bar bg-success" style="width: {{ min(100, ($project->fundingTotal() / max(1, $project->budget_prevu)) * 100) }}%"></div>
+                    </div>
+                    <small class="text-muted">{{ number_format(min(100, ($project->fundingTotal() / max(1, $project->budget_prevu)) * 100), 1) }}% financé</small>
+                </div>
             </div>
-            <div>
-                <h3 style="font-size: 0.875rem; font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">Infrastructure</h3>
-                <p>{{ $project->infrastructure->nom ?? 'Non définie' }}</p>
-                @if($project->infrastructure)
-                    <small class="aq-text-muted">{{ ucfirst($project->infrastructure->type) }}</small>
-                @endif
-            </div>
-            <div>
-                <h3 style="font-size: 0.875rem; font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">Responsable</h3>
-                <p>{{ $project->responsable->name ?? 'Non assigné' }}</p>
-                @if($project->responsable)
-                    <small class="aq-text-muted">{{ $project->responsable->email }}</small>
-                @endif
-            </div>
-        </div>
 
-        <div style="margin-top: 1.5rem;">
-            <h3 style="font-size: 0.875rem; font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">Description</h3>
-            <p style="color: var(--text-secondary); line-height: 1.6;">{{ $project->description }}</p>
-        </div>
-
-        {{-- Dates --}}
-        <div class="aq-grid-2" style="margin-top: 1.5rem;">
-            <div>
-                <h3 style="font-size: 0.875rem; font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">Date de début</h3>
-                <p>{{ Carbon::parse($project->date_debut)->format('d/m/Y') }}</p>
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="fas fa-tasks me-2 text-primary"></i>Avancement
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <h1 class="fw-bold display-4 text-primary">{{ $project->avancement_pourcentage }}%</h1>
+                    </div>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar bg-primary" style="width: {{ $project->avancement_pourcentage }}%">{{ $project->avancement_pourcentage }}%</div>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h3 style="font-size: 0.875rem; font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">Date de fin prévue</h3>
-                <p>{{ Carbon::parse($project->date_fin_prevue)->format('d/m/Y') }}</p>
-                @php
-                    $now = Carbon::now();
-                    $finPrevue = Carbon::parse($project->date_fin_prevue);
-                    $joursRestants = $now->diffInDays($finPrevue, false);
-                @endphp
-                @if($joursRestants < 0)
-                    <small class="aq-badge aq-badge-danger">Retard de {{ abs($joursRestants) }} jours</small>
-                @elseif($joursRestants <= 30)
-                    <small class="aq-badge aq-badge-warning">{{ $joursRestants }} jours restants</small>
-                @else
-                    <small class="aq-badge aq-badge-success">{{ $joursRestants }} jours restants</small>
-                @endif
-            </div>
-        </div>
 
-        {{-- Avancement --}}
-        <div style="margin-top: 1.5rem;">
-            <h3 style="font-size: 0.875rem; font-weight: 600; color: var(--navy); margin-bottom: 0.5rem;">
-                Avancement du projet: {{ $project->avancement_pourcentage }}%
-            </h3>
-            <div class="aq-progress" style="height: 2rem;">
-                <div class="aq-progress-bar" style="width: {{ $project->avancement_pourcentage }}%">
-                    {{ $project->avancement_pourcentage }}%
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white py-3">
+                    <h5 class="mb-0 fw-semibold">
+                        <i class="fas fa-bolt me-2 text-primary"></i>Actions Rapides
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('admin.projects.phase.create', $project) }}" class="btn btn-outline-primary">
+                            <i class="fas fa-plus me-2"></i>Ajouter une phase
+                        </a>
+                        <a href="{{ route('admin.projects.funding.create', $project) }}" class="btn btn-outline-success">
+                            <i class="fas fa-euro-sign me-2"></i>Ajouter un financement
+                        </a>
+                        <a href="{{ route('admin.projects.document.create', $project) }}" class="btn btn-outline-info">
+                            <i class="fas fa-file-upload me-2"></i>Ajouter un document
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    {{-- Budget et financement --}}
-    <div class="aq-grid-3" style="margin-top: 1.5rem;">
-        <div class="aq-stat-card">
-            <div class="aq-stat-label">Budget prévu</div>
-            <div class="aq-stat-value">{{ number_format($project->budget_prevu, 0, ',', ' ') }} €</div>
-        </div>
-        <div class="aq-stat-card">
-            <div class="aq-stat-label">Financement obtenu</div>
-            <div class="aq-stat-value">{{ number_format($project->fundingTotal(), 0, ',', ' ') }} €</div>
-            @php
-                $tauxFinancement = $project->budget_prevu > 0 ? ($project->fundingTotal() / $project->budget_prevu) * 100 : 0;
-            @endphp
-            <div class="aq-progress" style="margin-top: 0.5rem;">
-                <div class="aq-progress-bar" style="width: {{ min($tauxFinancement, 100) }}%"></div>
+{{-- Delete Modal --}}
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-semibold">
+                    <i class="fas fa-exclamation-triangle text-danger me-2"></i>
+                    Confirmer la suppression
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-        </div>
-        <div class="aq-stat-card">
-            <div class="aq-stat-label">Budget restant</div>
-            <div class="aq-stat-value" style="color: {{ $project->budgetRemaining() < 0 ? 'var(--danger)' : 'var(--success)' }}">
-                {{ number_format($project->budgetRemaining(), 0, ',', ' ') }} €
+            <div class="modal-body">
+                <p class="mb-0">Êtes-vous sûr de vouloir supprimer le projet <strong>"{{ $project->titre }}"</strong> ?</p>
+                <p class="text-muted small mb-0">Cette action est irréversible.</p>
             </div>
-            @if($project->budgetRemaining() < 0)
-                <small class="aq-badge aq-badge-danger">Dépassement</small>
-            @endif
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+                <form action="{{ route('admin.projects.destroy', $project) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Supprimer
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
-
-    {{-- Phases du projet --}}
-    <div class="aq-card" style="margin-top: 1.5rem;">
-        <div class="aq-card-header">
-            <div>
-                <h2 class="aq-card-title">Phases du Projet</h2>
-                <p class="aq-card-subtitle">{{ $project->projectPhases->count() }} phase(s) définie(s)</p>
-            </div>
-            <a href="{{ route('admin.project-phases.create', ['project_id' => $project->id]) }}" class="aq-btn aq-btn-primary">
-                <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                </svg>
-                Ajouter une phase
-            </a>
-        </div>
-
-        @if($project->projectPhases->count() > 0)
-            <div class="aq-table-responsive">
-                <table class="aq-table">
-                    <thead>
-                        <tr>
-                            <th>Phase</th>
-                            <th>Contractant</th>
-                            <th>Période</th>
-                            <th>Coût</th>
-                            <th>Avancement</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($project->projectPhases as $phase)
-                            <tr>
-                                <td>
-                                    <strong>{{ $phase->nom }}</strong>
-                                </td>
-                                <td>{{ $phase->contractor->nom ?? 'Non assigné' }}</td>
-                                <td>
-                                    <small class="aq-text-muted">
-                                        {{ Carbon::parse($phase->date_debut)->format('d/m/Y') }}<br>
-                                        → {{ Carbon::parse($phase->date_fin)->format('d/m/Y') }}
-                                    </small>
-                                </td>
-                                <td>
-                                    <strong>{{ number_format($phase->cout, 0, ',', ' ') }} €</strong>
-                                </td>
-                                <td>
-                                    <div class="aq-progress">
-                                        <div class="aq-progress-bar" style="width: {{ $phase->avancement }}%"></div>
-                                    </div>
-                                    <small class="aq-text-muted">{{ $phase->avancement }}%</small>
-                                </td>
-                                <td>
-                                    <div class="aq-actions">
-                                        <a href="{{ route('admin.project-phases.edit', $phase) }}" class="aq-btn-icon" title="Modifier">
-                                            <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                            </svg>
-                                        </a>
-                                        <form action="{{ route('admin.project-phases.destroy', $phase) }}" 
-                                              method="POST" 
-                                              style="display: inline;"
-                                              onsubmit="return confirm('Supprimer cette phase ?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="aq-btn-icon aq-btn-danger" title="Supprimer">
-                                                <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr style="font-weight: 600; background: var(--bg);">
-                            <td colspan="3">Total</td>
-                            <td>{{ number_format($project->projectPhases->sum('cout'), 0, ',', ' ') }} €</td>
-                            <td colspan="2"></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        @else
-            <div class="aq-table-empty">
-                <p>Aucune phase définie pour ce projet.</p>
-                <a href="{{ route('admin.project-phases.create', ['project_id' => $project->id]) }}" class="aq-btn aq-btn-primary" style="margin-top: 1rem;">
-                    Créer la première phase
-                </a>
-            </div>
-        @endif
-    </div>
-
-    {{-- Financements --}}
-    <div class="aq-card" style="margin-top: 1.5rem;">
-        <div class="aq-card-header">
-            <div>
-                <h2 class="aq-card-title">Financements</h2>
-                <p class="aq-card-subtitle">{{ $project->fundings->count() }} source(s) de financement</p>
-            </div>
-            <a href="{{ route('admin.fundings.create', ['project_id' => $project->id]) }}" class="aq-btn aq-btn-primary">
-                <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                </svg>
-                Ajouter un financement
-            </a>
-        </div>
-
-        @if($project->fundings->count() > 0)
-            <div class="aq-table-responsive">
-                <table class="aq-table">
-                    <thead>
-                        <tr>
-                            <th>Source</th>
-                            <th>Montant</th>
-                            <th>Date d'obtention</th>
-                            <th>Statut</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($project->fundings as $funding)
-                            <tr>
-                                <td>
-                                    <strong>{{ ucfirst($funding->source) }}</strong>
-                                    @if($funding->donateur)
-                                        <br><small class="aq-text-muted">Don de {{ $funding->donateur->name }}</small>
-                                    @endif
-                                    @if($funding->description)
-                                        <br><small class="aq-text-muted">{{ Str::limit($funding->description, 50) }}</small>
-                                    @endif
-                                </td>
-                                <td>
-                                    <strong>{{ number_format($funding->montant, 0, ',', ' ') }} €</strong>
-                                </td>
-                                <td>{{ Carbon::parse($funding->date_obtention)->format('d/m/Y') }}</td>
-                                <td>
-                                    @php
-                                        $fundingBadge = match($funding->statut) {
-                                            'confirmé' => 'aq-badge-success',
-                                            'en_attente' => 'aq-badge-warning',
-                                            'refusé' => 'aq-badge-danger',
-                                            default => 'aq-badge-secondary'
-                                        };
-                                    @endphp
-                                    <span class="aq-badge {{ $fundingBadge }}">
-                                        {{ ucfirst(str_replace('_', ' ', $funding->statut)) }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <div class="aq-actions">
-                                        @if($funding->statut === 'en_attente')
-                                            <form action="{{ route('admin.fundings.approve', $funding) }}" method="POST" style="display: inline;">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="aq-btn-icon aq-btn-success" title="Approuver">
-                                                    <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                                    </svg>
-                                                </button>
-                                            </form>
-                                            <form action="{{ route('admin.fundings.reject', $funding) }}" method="POST" style="display: inline;">
-                                                @csrf
-                                                @method('PATCH')
-                                                <button type="submit" class="aq-btn-icon aq-btn-danger" title="Refuser">
-                                                    <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                                                    </svg>
-                                                </button>
-                                            </form>
-                                        @endif
-                                        <a href="{{ route('admin.fundings.edit', $funding) }}" class="aq-btn-icon" title="Modifier">
-                                            <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                            </svg>
-                                        </a>
-                                        <form action="{{ route('admin.fundings.destroy', $funding) }}" 
-                                              method="POST" 
-                                              style="display: inline;"
-                                              onsubmit="return confirm('Supprimer ce financement ?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="aq-btn-icon aq-btn-danger" title="Supprimer">
-                                                <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr style="font-weight: 600; background: var(--bg);">
-                            <td>Total</td>
-                            <td>{{ number_format($project->fundings->sum('montant'), 0, ',', ' ') }} €</td>
-                            <td colspan="3"></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        @else
-            <div class="aq-table-empty">
-                <p>Aucun financement enregistré pour ce projet.</p>
-                <a href="{{ route('admin.fundings.create', ['project_id' => $project->id]) }}" class="aq-btn aq-btn-primary" style="margin-top: 1rem;">
-                    Ajouter le premier financement
-                </a>
-            </div>
-        @endif
-    </div>
-
-    {{-- Documents --}}
-    <div class="aq-card" style="margin-top: 1.5rem;">
-        <div class="aq-card-header">
-            <div>
-                <h2 class="aq-card-title">Documents</h2>
-                <p class="aq-card-subtitle">{{ $project->projectDocuments->count() }} document(s)</p>
-            </div>
-            <a href="{{ route('admin.project-documents.create', ['project_id' => $project->id]) }}" class="aq-btn aq-btn-primary">
-                <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                </svg>
-                Ajouter un document
-            </a>
-        </div>
-
-        @if($project->projectDocuments->count() > 0)
-            <div class="aq-grid-3">
-                @foreach($project->projectDocuments as $document)
-                    <div class="aq-document-card">
-                        <div class="aq-document-icon">
-                            <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                            </svg>
-                        </div>
-                        <div class="aq-document-info">
-                            <h4>{{ $document->nom }}</h4>
-                            <p class="aq-text-muted">{{ ucfirst($document->type_document) }}</p>
-                            @if($document->description)
-                                <p style="font-size: 0.875rem; margin-top: 0.5rem;">{{ Str::limit($document->description, 60) }}</p>
-                            @endif
-                        </div>
-                        <div class="aq-document-actions">
-                            <a href="{{ Storage::url($document->chemin_fichier) }}" class="aq-btn-icon" title="Télécharger" download>
-                                <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                                </svg>
-                            </a>
-                            <form action="{{ route('admin.project-documents.destroy', $document) }}" 
-                                  method="POST" 
-                                  style="display: inline;"
-                                  onsubmit="return confirm('Supprimer ce document ?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="aq-btn-icon aq-btn-danger" title="Supprimer">
-                                    <svg class="aq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                    </svg>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        @else
-            <div class="aq-table-empty">
-                <p>Aucun document attaché à ce projet.</p>
-                <a href="{{ route('admin.project-documents.create', ['project_id' => $project->id]) }}" class="aq-btn aq-btn-primary" style="margin-top: 1rem;">
-                    Ajouter le premier document
-                </a>
-            </div>
-        @endif
-    </div>
+</div>
 
 </x-project.layouts.admin>

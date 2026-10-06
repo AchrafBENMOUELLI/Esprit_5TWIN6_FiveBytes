@@ -24,7 +24,7 @@ class FundingController extends Controller
         $fundingTotal = $project->fundingTotal();
         $budgetRemaining = $budgetPrevu - $fundingTotal;
 
-        return view('components.project.front.donate', compact('project', 'budgetPrevu', 'fundingTotal', 'budgetRemaining'));
+        return view('project.front.donate', compact('project', 'budgetPrevu', 'fundingTotal', 'budgetRemaining'));
     }
 
     /**

@@ -23,7 +23,7 @@ class StoreProjectRequest extends FormRequest
     {
         return [
             'titre' => ['required', 'string', 'max:200'],
-            'type' => ['required', 'in:rénovation,décontamination,extension,modernisation'],
+            'type' => ['required', 'in:réparation,modernisation,extension,construction'],
             'description' => ['required', 'string'],
             'budget_prevu' => ['required', 'numeric', 'min:0', 'max:10000000'],
             'date_debut' => ['required', 'date', 'after_or_equal:today'],
@@ -31,7 +31,7 @@ class StoreProjectRequest extends FormRequest
             'statut' => ['required', 'in:planifié,en_cours,suspendu,terminé,annulé'],
             'avancement_pourcentage' => ['nullable', 'integer', 'min:0', 'max:100'],
             'zone_id' => ['required', 'exists:zones,id'],
-            'infrastructure_id' => ['nullable', 'exists:infrastructures,id'],
+            'infrastructure_id' => ['required', 'exists:infrastructures,id'],
             'responsable_id' => ['required', 'exists:users,id'],
         ];
     }
@@ -51,7 +51,7 @@ class StoreProjectRequest extends FormRequest
             
             // Type
             'type.required' => 'Le type de projet est obligatoire.',
-            'type.in' => 'Le type doit être : rénovation, décontamination, extension ou modernisation.',
+            'type.in' => 'Le type doit être : réparation, modernisation, extension ou construction.',
             
             // Description
             'description.required' => 'La description du projet est obligatoire.',

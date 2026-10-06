@@ -34,7 +34,7 @@ class ProjectController extends Controller
         $projects = $query->orderBy('date_debut', 'desc')->paginate(12);
         $zones = Zone::all();
         
-        return view('components.project.front.index', compact('projects', 'zones'));
+        return view('project.front.index', compact('projects', 'zones'));
     }
 
     /**
@@ -53,17 +53,13 @@ class ProjectController extends Controller
             'infrastructure',
             'responsable',
             'projectPhases.contractor',
-            'fundings' => function ($query) {
-                // Charger uniquement les financements approuvés pour le public
-                $query->where('statut', 'approuve');
-            },
+            'fundings',
             'projectDocuments' => function ($query) {
-                // Charger uniquement les documents publics (exclure les documents sensibles si nécessaire)
-                // Pour l'instant, on affiche tous les documents
-                $query->orderBy('created_at', 'desc');
+                // Charger uniquement les documents publics
+                $query->where('type', 'public')->orderBy('created_at', 'desc');
             }
         ]);
         
-        return view('components.project.front.show', compact('project'));
+        return view('project.front.show', compact('project'));
     }
 }

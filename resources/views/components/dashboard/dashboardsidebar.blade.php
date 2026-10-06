@@ -1,4 +1,4 @@
-<style>{!! file_get_contents(resource_path('views/components/dashboard/dashboardsidebar.css')) !!}</style>
+<link rel="stylesheet" href="{{ asset('css/dashboardsidebar.css') }}">
 
 <aside class="aq-sidebar">
     <a href="{{ url('/') }}" class="aq-sidebar-brand">
@@ -7,7 +7,7 @@
     </a>
 
     <nav class="aq-sidebar-menu">
-        <a href="{{ route('dashboard') }}" class="{{ request('module') ? '' : 'active' }}">Tableau de bord</a>
+        <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') && !request('module') ? 'active' : '' }}">Tableau de bord</a>
         <p class="aq-sidebar-label">Modules</p>
         <a href="{{ route('dashboard', ['module' => 'infrastructure']) }}" class="{{ request('module') === 'infrastructure' ? 'active' : '' }}">Infrastructure</a>
         <a href="{{ route('dashboard', ['module' => 'incident']) }}" class="{{ request('module') === 'incident' ? 'active' : '' }}">Incidents</a>
@@ -18,6 +18,7 @@
         @if (auth()->user()->role === \App\Enums\UserRole::Admin)
             <p class="aq-sidebar-label">Administration</p>
             <a href="#">Utilisateurs</a>
+            <a href="{{ route('admin.contractors.index') }}" class="{{ request()->routeIs('admin.contractors.*') ? 'active' : '' }}">Entrepreneurs</a>
         @endif
     </nav>
 </aside>

@@ -17,7 +17,7 @@
         @auth
             @if(Auth::user()->role === App\Enums\UserRole::Citoyen)
                 {{-- Navigation pour Citoyens --}}
-                <a href="{{ route('project.index') }}" class="{{ request()->routeIs('project.*') ? 'active' : '' }}">
+                <a href="{{ route('projects.index') }}" class="{{ request()->routeIs('projects.*') ? 'active' : '' }}">
                     Nos Projets
                 </a>
                 {{-- Les autres modules seront ajoutés par vos collègues --}}
@@ -30,10 +30,10 @@
                 <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     Dashboard
                 </a>
-                <a href="{{ route('admin.project.index') }}" class="{{ request()->routeIs('admin.project.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.projects.index') }}" class="{{ request()->routeIs('admin.projects.*') ? 'active' : '' }}">
                     Projets
                 </a>
-                <a href="{{ route('admin.contractor.index') }}" class="{{ request()->routeIs('admin.contractor.*') ? 'active' : '' }}">
+                <a href="{{ route('admin.contractors.index') }}" class="{{ request()->routeIs('admin.contractors.*') ? 'active' : '' }}">
                     Prestataires
                 </a>
                 {{-- Les autres modules admin seront ajoutés par vos collègues --}}
@@ -51,11 +51,7 @@
                 </button>
             </form>
         @else
-            {{-- Navigation pour visiteurs non authentifiés --}}
-            <a href="{{ route('project.index') }}" class="{{ request()->routeIs('project.*') ? 'active' : '' }}">
-                Projets de Rénovation
-            </a>
-            
+            {{-- Navigation pour visiteurs non authentifiés - Vide pour le moment --}}
             @unless (request()->routeIs('login', 'register'))
                 <a href="{{ route('login') }}" class="aq-login">Connexion</a>
             @endunless

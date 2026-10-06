@@ -12,14 +12,6 @@ use Illuminate\Http\Request;
 class FundingController extends Controller
 {
     /**
-     * Constructeur avec middleware d'authentification
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
      * Afficher la liste des financements d'un projet.
      */
     public function index($projectId)
@@ -37,7 +29,7 @@ class FundingController extends Controller
         $project = Project::findOrFail($projectId);
         $donateurs = User::whereHas('donations')->orWhere('id', '>', 0)->orderBy('name')->get();
 
-        return view('components.project.admin.fundings.create', compact('project', 'donateurs'));
+        return view('project.admin.fundings.create', compact('project', 'donateurs'));
     }
 
     /**
@@ -48,7 +40,7 @@ class FundingController extends Controller
         $funding = Funding::create($request->validated());
 
         return redirect()
-            ->route('admin.project.show', $funding->project_id)
+            ->route('admin.projects.show', $funding->project_id)
             ->with('success', 'Le financement de ' . number_format($funding->montant, 2, ',', ' ') . ' € a été créé avec succès.');
     }
 
@@ -72,7 +64,7 @@ class FundingController extends Controller
         $funding->update($request->validated());
 
         return redirect()
-            ->route('admin.project.show', $funding->project_id)
+            ->route('admin.projects.show', $funding->project_id)
             ->with('success', 'Le financement a été mis à jour avec succès.');
     }
 
@@ -88,7 +80,7 @@ class FundingController extends Controller
         $funding->delete();
 
         return redirect()
-            ->route('admin.project.show', $projectId)
+            ->route('admin.projects.show', $projectId)
             ->with('success', 'Le financement de ' . $montant . ' € a été supprimé avec succès.');
     }
 }

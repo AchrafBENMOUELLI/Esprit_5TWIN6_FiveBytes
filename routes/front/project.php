@@ -17,7 +17,7 @@ use App\Http\Controllers\Front\Project\FundingController;
 // ============================================================================
 // PROJECTS - Consultation Publique (Sans Authentification)
 // ============================================================================
-Route::prefix('projets')->name('project.')->group(function () {
+Route::prefix('projets')->name('projects.')->group(function () {
     // Liste des projets publics avec filtres
     Route::get('/', [ProjectController::class, 'index'])->name('index');
     
@@ -31,7 +31,7 @@ Route::prefix('projets')->name('project.')->group(function () {
 Route::middleware('auth')->group(function () {
     
     // Simulation et enregistrement de dons
-    Route::prefix('projets/{project}')->name('project.')->group(function () {
+    Route::prefix('projets/{project}')->name('projects.')->group(function () {
         // Formulaire de don pour un projet spécifique
         Route::get('/faire-un-don', [FundingController::class, 'simulateDonation'])->name('donate');
         
@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
     });
     
     // Enregistrement du don
-    Route::post('/projets/don', [FundingController::class, 'storeDonation'])->name('project.donate.store');
+    Route::post('/projets/don', [FundingController::class, 'storeDonation'])->name('projects.donate.store');
     
     // Historique des dons du citoyen connecté
     Route::prefix('mes-dons')->name('donations.')->group(function () {

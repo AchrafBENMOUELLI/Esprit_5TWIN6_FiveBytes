@@ -12,21 +12,13 @@ use Illuminate\Support\Str;
 class ProjectDocumentController extends Controller
 {
     /**
-     * Constructeur avec middleware d'authentification
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
      * Afficher la liste des documents d'un projet.
      */
     public function index($projectId)
     {
         $project = Project::with('projectDocuments')->findOrFail($projectId);
 
-        return view('components.project.admin.documents.index', compact('project'));
+        return view('project.admin.documents.index', compact('project'));
     }
 
     /**
@@ -36,7 +28,7 @@ class ProjectDocumentController extends Controller
     {
         $project = Project::findOrFail($projectId);
 
-        return view('components.project.admin.documents.create', compact('project'));
+        return view('project.admin.documents.create', compact('project'));
     }
 
     /**
@@ -87,7 +79,7 @@ class ProjectDocumentController extends Controller
         ]);
 
         return redirect()
-            ->route('admin.project.show', $projectId)
+            ->route('admin.projects.show', $projectId)
             ->with('success', 'Le document "' . $document->nom . '" a été uploadé avec succès.');
     }
 
@@ -125,7 +117,7 @@ class ProjectDocumentController extends Controller
         ]);
 
         return redirect()
-            ->route('admin.project.show', $document->project_id)
+            ->route('admin.projects.show', $document->project_id)
             ->with('success', 'Le document "' . $document->nom . '" a été mis à jour avec succès.');
     }
 
@@ -147,7 +139,7 @@ class ProjectDocumentController extends Controller
         $document->delete();
 
         return redirect()
-            ->route('admin.project.show', $projectId)
+            ->route('admin.projects.show', $projectId)
             ->with('success', 'Le document "' . $nom . '" a été supprimé avec succès.');
     }
 

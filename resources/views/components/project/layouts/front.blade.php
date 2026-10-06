@@ -116,7 +116,7 @@
                     <h4 class="aq-footer-subtitle">Navigation</h4>
                     <ul class="aq-footer-links">
                         <li><a href="{{ url('/') }}">Accueil</a></li>
-                        <li><a href="{{ route('project.index') }}">Projets</a></li>
+                        <li><a href="{{ route('projects.index') }}">Projets</a></li>
                         @auth
                             <li><a href="{{ route('donations.index') }}">Mes dons</a></li>
                         @endauth

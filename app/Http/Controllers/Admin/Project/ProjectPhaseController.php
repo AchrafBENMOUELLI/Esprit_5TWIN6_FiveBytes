@@ -12,14 +12,6 @@ use Illuminate\Http\Request;
 class ProjectPhaseController extends Controller
 {
     /**
-     * Constructeur avec middleware d'authentification
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
      * Afficher la liste des phases d'un projet.
      */
     public function index($projectId)
@@ -37,7 +29,7 @@ class ProjectPhaseController extends Controller
         $project = Project::findOrFail($projectId);
         $contractors = Contractor::orderBy('nom')->get();
 
-        return view('components.project.admin.phases.create', compact('project', 'contractors'));
+        return view('project.admin.phases.create', compact('project', 'contractors'));
     }
 
     /**
@@ -48,7 +40,7 @@ class ProjectPhaseController extends Controller
         $phase = ProjectPhase::create($request->validated());
 
         return redirect()
-            ->route('admin.project.show', $phase->project_id)
+            ->route('admin.projects.show', $phase->project_id)
             ->with('success', 'La phase "' . $phase->nom . '" a été créée avec succès.');
     }
 
@@ -60,7 +52,7 @@ class ProjectPhaseController extends Controller
         $phase = ProjectPhase::with('project')->findOrFail($id);
         $contractors = Contractor::orderBy('nom')->get();
 
-        return view('components.project.admin.phases.edit', compact('phase', 'contractors'));
+        return view('project.admin.phases.edit', compact('phase', 'contractors'));
     }
 
     /**
@@ -72,7 +64,7 @@ class ProjectPhaseController extends Controller
         $phase->update($request->validated());
 
         return redirect()
-            ->route('admin.project.show', $phase->project_id)
+            ->route('admin.projects.show', $phase->project_id)
             ->with('success', 'La phase "' . $phase->nom . '" a été mise à jour avec succès.');
     }
 
@@ -88,7 +80,7 @@ class ProjectPhaseController extends Controller
         $phase->delete();
 
         return redirect()
-            ->route('admin.project.show', $projectId)
+            ->route('admin.projects.show', $projectId)
             ->with('success', 'La phase "' . $nom . '" a été supprimée avec succès.');
     }
 }

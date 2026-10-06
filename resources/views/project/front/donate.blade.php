@@ -130,8 +130,9 @@
                         <hr class="my-4">
 
                         {{-- Donation Form --}}
-                        <form action="{{ route('projects.storeDonation', $project) }}" method="POST" id="donationForm">
+                        <form action="{{ route('projects.donate.store') }}" method="POST" id="donationForm">
                             @csrf
+                            <input type="hidden" name="project_id" value="{{ $project->id }}">
 
                             <div class="text-center mb-4">
                                 <i class="fas fa-hand-holding-heart fa-3x text-primary mb-3"></i>

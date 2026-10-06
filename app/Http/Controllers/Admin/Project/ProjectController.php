@@ -15,14 +15,6 @@ use Illuminate\Http\Request;
 class ProjectController extends Controller
 {
     /**
-     * Constructeur avec middleware d'authentification
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
      * Afficher la liste paginée des projets avec filtres et recherche.
      */
     public function index(Request $request)
@@ -56,7 +48,7 @@ class ProjectController extends Controller
         $projects = $query->orderBy('date_debut', 'desc')->paginate(15);
         $zones = Zone::all();
 
-        return view('components.project.admin.index', compact('projects', 'zones'));
+        return view('project.admin.projects.index', compact('projects', 'zones'));
     }
 
     /**
@@ -68,7 +60,7 @@ class ProjectController extends Controller
         $infrastructures = Infrastructure::all();
         $gestionnaires = User::where('role', UserRole::Gestionnaire)->get();
 
-        return view('components.project.admin.create', compact('zones', 'infrastructures', 'gestionnaires'));
+        return view('project.admin.projects.create', compact('zones', 'infrastructures', 'gestionnaires'));
     }
 
     /**
@@ -79,7 +71,7 @@ class ProjectController extends Controller
         $project = Project::create($request->validated());
 
         return redirect()
-            ->route('admin.project.index')
+            ->route('admin.projects.index')
             ->with('success', 'Le projet "' . $project->titre . '" a été créé avec succès.');
     }
 
@@ -97,7 +89,7 @@ class ProjectController extends Controller
             'projectDocuments'
         ]);
 
-        return view('components.project.admin.show', compact('project'));
+        return view('project.admin.projects.show', compact('project'));
     }
 
     /**
@@ -109,7 +101,7 @@ class ProjectController extends Controller
         $infrastructures = Infrastructure::all();
         $gestionnaires = User::where('role', UserRole::Gestionnaire)->get();
 
-        return view('components.project.admin.edit', compact('project', 'zones', 'infrastructures', 'gestionnaires'));
+        return view('project.admin.projects.edit', compact('project', 'zones', 'infrastructures', 'gestionnaires'));
     }
 
     /**
@@ -120,7 +112,7 @@ class ProjectController extends Controller
         $project->update($request->validated());
 
         return redirect()
-            ->route('admin.project.show', $project)
+            ->route('admin.projects.show', $project)
             ->with('success', 'Le projet "' . $project->titre . '" a été mis à jour avec succès.');
     }
 
@@ -137,7 +129,7 @@ class ProjectController extends Controller
 
         if ($phasesCount > 0 || $fundingsCount > 0 || $documentsCount > 0) {
             return redirect()
-                ->route('admin.project.show', $project)
+                ->route('admin.projects.show', $project)
                 ->with('error', 'Impossible de supprimer ce projet car il contient des phases (' . $phasesCount . '), des financements (' . $fundingsCount . ') ou des documents (' . $documentsCount . '). Veuillez les supprimer d\'abord.');
         }
 
@@ -145,7 +137,7 @@ class ProjectController extends Controller
         $project->delete();
 
         return redirect()
-            ->route('admin.project.index')
+            ->route('admin.projects.index')
             ->with('success', 'Le projet "' . $titre . '" a été supprimé avec succès.');
     }
 }

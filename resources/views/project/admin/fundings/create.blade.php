@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <form action="{{ route('admin.fundings.store') }}" method="POST" class="needs-validation" novalidate>
+    <form action="{{ route('admin.project.funding.store', $project) }}" method="POST" class="needs-validation" novalidate>
         @csrf
         <input type="hidden" name="project_id" value="{{ $project->id }}">
 
