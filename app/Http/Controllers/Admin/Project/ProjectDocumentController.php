@@ -39,7 +39,7 @@ class ProjectDocumentController extends Controller
         $request->validate([
             'project_id' => 'required|exists:projects,id',
             'nom' => 'required|string|max:200',
-            'type_document' => 'required|in:cahier_charges,plan_technique,rapport_etude,photo,autre',
+            'type_document' => 'required|in:rapport,photo,facture,contrat,plan,autre',
             'description' => 'nullable|string',
             'fichier' => 'required|file|max:10240|mimes:pdf,doc,docx,xls,xlsx,jpg,jpeg,png,gif'
         ], [
@@ -72,15 +72,14 @@ class ProjectDocumentController extends Controller
         // Créer l'enregistrement en base de données
         $document = ProjectDocument::create([
             'project_id' => $projectId,
-            'nom' => $request->nom,
-            'type_document' => $request->type_document,
+            'titre' => $request->nom,
+            'type' => $request->type_document,
             'chemin_fichier' => $path,
-            'description' => $request->description,
         ]);
 
         return redirect()
             ->route('admin.projects.show', $projectId)
-            ->with('success', 'Le document "' . $document->nom . '" a été uploadé avec succès.');
+            ->with('success', 'Le document "' . $document->titre . '" a été uploadé avec succès.');
     }
 
     /**
@@ -100,7 +99,7 @@ class ProjectDocumentController extends Controller
     {
         $request->validate([
             'nom' => 'required|string|max:200',
-            'type_document' => 'required|in:cahier_charges,plan_technique,rapport_etude,photo,autre',
+            'type_document' => 'required|in:rapport,photo,facture,contrat,plan,autre',
             'description' => 'nullable|string',
         ], [
             'nom.required' => 'Le nom du document est requis.',
@@ -111,14 +110,13 @@ class ProjectDocumentController extends Controller
 
         $document = ProjectDocument::findOrFail($id);
         $document->update([
-            'nom' => $request->nom,
-            'type_document' => $request->type_document,
-            'description' => $request->description,
+            'titre' => $request->nom,
+            'type' => $request->type_document,
         ]);
 
         return redirect()
             ->route('admin.projects.show', $document->project_id)
-            ->with('success', 'Le document "' . $document->nom . '" a été mis à jour avec succès.');
+            ->with('success', 'Le document "' . $document->titre . '" a été mis à jour avec succès.');
     }
 
     /**

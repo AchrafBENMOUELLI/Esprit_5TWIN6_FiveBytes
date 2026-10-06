@@ -1,3 +1,8 @@
+@extends('layouts.admin')
+
+@section('title', 'Nouveau Document')
+
+@section('content')
 <x-project.layouts.admin
     title="Nouveau Document"
     :breadcrumbs="[
@@ -146,23 +151,23 @@
                                     name="type_document"
                                     required>
                                 <option value="">Sélectionner un type</option>
-                                <option value="plan" {{ old('type_document') === 'plan' ? 'selected' : '' }}>
-                                    <i class="fas fa-drafting-compass"></i> Plan / Schéma
-                                </option>
                                 <option value="rapport" {{ old('type_document') === 'rapport' ? 'selected' : '' }}>
-                                    <i class="fas fa-file-alt"></i> Rapport / Compte-rendu
+                                    📄 Rapport
                                 </option>
                                 <option value="photo" {{ old('type_document') === 'photo' ? 'selected' : '' }}>
-                                    <i class="fas fa-camera"></i> Photo / Image
+                                    📷 Photo
                                 </option>
                                 <option value="facture" {{ old('type_document') === 'facture' ? 'selected' : '' }}>
-                                    <i class="fas fa-file-invoice"></i> Facture
+                                    🧾 Facture
                                 </option>
                                 <option value="contrat" {{ old('type_document') === 'contrat' ? 'selected' : '' }}>
-                                    <i class="fas fa-file-contract"></i> Contrat
+                                    📝 Contrat
+                                </option>
+                                <option value="plan" {{ old('type_document') === 'plan' ? 'selected' : '' }}>
+                                    📐 Plan
                                 </option>
                                 <option value="autre" {{ old('type_document') === 'autre' ? 'selected' : '' }}>
-                                    <i class="fas fa-file"></i> Autre
+                                    📁 Autre
                                 </option>
                             </select>
                             @error('type_document')
@@ -392,11 +397,7 @@
         border-color: #0dcaf0 !important;
     }
 </style>
+@endpush
 
 </x-project.layouts.admin>
 @endsection
-        border-color: #0dcaf0 !important;
-    }
-</style>
-
-</x-project.layouts.admin>
