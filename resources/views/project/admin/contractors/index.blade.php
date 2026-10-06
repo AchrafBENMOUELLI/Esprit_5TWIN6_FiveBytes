@@ -1,8 +1,15 @@
-@extends('components.project.layouts.admin')
+@extends('layouts.admin')
 
 @section('title', 'Gestion des Contractants')
 
 @section('content')
+<x-project.layouts.admin
+    title="Gestion des Contractants"
+    :breadcrumbs="[
+        ['label' => 'Tableau de bord', 'url' => route('dashboard')],
+        ['label' => 'Contractants', 'url' => null]
+    ]">
+
 <div class="container-fluid py-4">
     {{-- En-tête --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -216,16 +223,13 @@
                                            title="Modifier">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('admin.contractors.destroy', $contractor) }}" 
-                                              method="POST" 
-                                              style="display: inline;"
-                                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce contractant ?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Supprimer">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-danger" 
+                                                title="Supprimer"
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deleteModal{{ $contractor->id }}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -254,7 +258,51 @@
         </div>
     </div>
 </div>
-@endsection
+
+{{-- Delete Modals --}}
+@foreach($contractors as $contractor)
+<div class="modal fade" id="deleteModal{{ $contractor->id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ $contractor->id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel{{ $contractor->id }}">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Confirmer la suppression
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">Êtes-vous sûr de vouloir supprimer ce contractant ?</p>
+                <div class="alert alert-warning">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>{{ $contractor->nom }}</strong>
+                    @if($contractor->projectPhases->count() > 0)
+                        <br><small class="text-danger">
+                            <i class="fas fa-exclamation-triangle me-1"></i>
+                            Ce contractant est assigné à {{ $contractor->projectPhases->count() }} phase(s) de projet.
+                        </small>
+                    @endif
+                </div>
+                <p class="text-muted small mb-0">Cette action est irréversible.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>
+                    Annuler
+                </button>
+                <form action="{{ route('admin.contractors.destroy', $contractor) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>
+                        Supprimer définitivement
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
 
 @push('styles')
 <style>
@@ -273,3 +321,6 @@
     }
 </style>
 @endpush
+
+</x-project.layouts.admin>
+@endsection

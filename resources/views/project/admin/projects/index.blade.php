@@ -1,3 +1,8 @@
+@extends('layouts.admin')
+
+@section('title', 'Gestion des Projets')
+
+@section('content')
 <x-project.layouts.admin
     title="Gestion des Projets"
     :breadcrumbs="[
@@ -326,3 +331,4 @@
 </script>
 
 </x-project.layouts.admin>
+@endsection

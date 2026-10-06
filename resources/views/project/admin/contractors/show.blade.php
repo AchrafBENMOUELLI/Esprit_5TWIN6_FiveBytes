@@ -1,8 +1,16 @@
-@extends('components.project.layouts.admin')
+@extends('layouts.admin')
 
 @section('title', $contractor->nom)
 
 @section('content')
+<x-project.layouts.admin
+    :title="$contractor->nom"
+    :breadcrumbs="[
+        ['label' => 'Tableau de bord', 'url' => route('dashboard')],
+        ['label' => 'Contractants', 'url' => route('admin.contractors.index')],
+        ['label' => $contractor->nom, 'url' => null]
+    ]">
+
 <div class="container-fluid py-4">
     {{-- En-tête --}}
     <div class="mb-4">
@@ -46,15 +54,6 @@
             </div>
         </div>
     </div>
-
-    {{-- Messages Flash --}}
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
 
     <div class="row">
         {{-- Colonne principale --}}
@@ -337,23 +336,59 @@
                             <i class="fas fa-edit me-2"></i>
                             Modifier les infos
                         </a>
-                        <form action="{{ route('admin.contractors.destroy', $contractor) }}" 
-                              method="POST"
-                              onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce contractant ?');">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-outline-danger w-100">
-                                <i class="fas fa-trash me-2"></i>
-                                Supprimer
-                            </button>
-                        </form>
+                        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <i class="fas fa-trash me-2"></i>
+                            Supprimer
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-@endsection
+
+{{-- Delete Confirmation Modal --}}
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Confirmer la suppression
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-3">Êtes-vous sûr de vouloir supprimer ce contractant ?</p>
+                <div class="alert alert-warning">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>{{ $contractor->nom }}</strong>
+                    @if($contractor->projectPhases->count() > 0)
+                        <br><small class="text-danger">
+                            <i class="fas fa-exclamation-triangle me-1"></i>
+                            Ce contractant est assigné à {{ $contractor->projectPhases->count() }} phase(s) de projet.
+                        </small>
+                    @endif
+                </div>
+                <p class="text-muted small mb-0">Cette action est irréversible.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>
+                    Annuler
+                </button>
+                <form action="{{ route('admin.contractors.destroy', $contractor) }}" method="POST" style="display: inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>
+                        Supprimer définitivement
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 @push('styles')
 <style>
@@ -369,3 +404,6 @@
     }
 </style>
 @endpush
+
+</x-project.layouts.admin>
+@endsection

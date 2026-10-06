@@ -1,8 +1,17 @@
-@extends('components.project.layouts.admin')
+@extends('layouts.admin')
 
 @section('title', 'Nouveau Financement')
 
 @section('content')
+<x-project.layouts.admin
+    title="Nouveau Financement"
+    :breadcrumbs="[
+        ['label' => 'Tableau de bord', 'url' => route('dashboard')],
+        ['label' => 'Projets', 'url' => route('admin.projects.index')],
+        ['label' => $project->titre, 'url' => route('admin.projects.show', $project)],
+        ['label' => 'Nouveau Financement', 'url' => null]
+    ]">
+
 <div class="container-fluid py-4">
     {{-- En-tête avec contexte du projet --}}
     <div class="mb-4">
@@ -57,7 +66,7 @@
         </div>
     </div>
 
-    <form action="{{ route('admin.project.funding.store', $project) }}" method="POST" class="needs-validation" novalidate>
+    <form action="{{ route('admin.projects.funding.store', $project) }}" method="POST" class="needs-validation" novalidate>
         @csrf
         <input type="hidden" name="project_id" value="{{ $project->id }}">
 
@@ -82,17 +91,23 @@
                                     name="source"
                                     required>
                                 <option value="">Sélectionner une source</option>
-                                <option value="subvention" {{ old('source') === 'subvention' ? 'selected' : '' }}>
-                                    <i class="fas fa-university"></i> Subvention publique
+                                <option value="municipal" {{ old('source') === 'municipal' ? 'selected' : '' }}>
+                                    🏛️ Municipal
+                                </option>
+                                <option value="régional" {{ old('source') === 'régional' ? 'selected' : '' }}>
+                                    🏛️ Régional
+                                </option>
+                                <option value="fédéral" {{ old('source') === 'fédéral' ? 'selected' : '' }}>
+                                    🏛️ Fédéral
+                                </option>
+                                <option value="européen" {{ old('source') === 'européen' ? 'selected' : '' }}>
+                                    🇪🇺 Européen
+                                </option>
+                                <option value="privé" {{ old('source') === 'privé' ? 'selected' : '' }}>
+                                    🏢 Privé
                                 </option>
                                 <option value="don" {{ old('source') === 'don' ? 'selected' : '' }}>
-                                    <i class="fas fa-heart"></i> Don (citoyen)
-                                </option>
-                                <option value="prêt" {{ old('source') === 'prêt' ? 'selected' : '' }}>
-                                    <i class="fas fa-money-bill-wave"></i> Prêt bancaire
-                                </option>
-                                <option value="partenariat" {{ old('source') === 'partenariat' ? 'selected' : '' }}>
-                                    <i class="fas fa-handshake"></i> Partenariat
+                                    ❤️ Don (citoyen)
                                 </option>
                             </select>
                             @error('source')
@@ -100,7 +115,7 @@
                             @enderror
                             <div class="form-text">
                                 <i class="fas fa-info-circle me-1"></i>
-                                Le type détermine le traitement du financement
+                                Le type détermine la source du financement
                             </div>
                         </div>
 
@@ -182,50 +197,23 @@
                             </div>
                         </div>
 
-                        {{-- Date d'obtention --}}
+                        {{-- Date de versement --}}
                         <div class="mb-3">
-                            <label for="date_obtention" class="form-label">
-                                Date d'obtention <span class="text-danger">*</span>
+                            <label for="date_versement" class="form-label">
+                                Date de versement <span class="text-danger">*</span>
                             </label>
                             <input type="date" 
-                                   class="form-control @error('date_obtention') is-invalid @enderror" 
-                                   id="date_obtention" 
-                                   name="date_obtention" 
-                                   value="{{ old('date_obtention', date('Y-m-d')) }}"
+                                   class="form-control @error('date_versement') is-invalid @enderror" 
+                                   id="date_versement" 
+                                   name="date_versement" 
+                                   value="{{ old('date_versement', date('Y-m-d')) }}"
                                    max="{{ date('Y-m-d') }}"
                                    required>
-                            @error('date_obtention')
+                            @error('date_versement')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                             <div class="form-text">
                                 Ne peut pas être dans le futur
-                            </div>
-                        </div>
-
-                        {{-- Statut --}}
-                        <div class="mb-3">
-                            <label for="statut" class="form-label">
-                                Statut <span class="text-danger">*</span>
-                            </label>
-                            <select class="form-select @error('statut') is-invalid @enderror" 
-                                    id="statut" 
-                                    name="statut"
-                                    required>
-                                <option value="confirmé" {{ old('statut', 'confirmé') === 'confirmé' ? 'selected' : '' }}>
-                                    ✅ Confirmé
-                                </option>
-                                <option value="en_attente" {{ old('statut') === 'en_attente' ? 'selected' : '' }}>
-                                    ⏳ En attente
-                                </option>
-                                <option value="refusé" {{ old('statut') === 'refusé' ? 'selected' : '' }}>
-                                    ❌ Refusé
-                                </option>
-                            </select>
-                            @error('statut')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                            <div class="form-text">
-                                "Confirmé" = le financement est acquis et comptabilisé
                             </div>
                         </div>
 
@@ -264,7 +252,6 @@
         </div>
     </form>
 </div>
-@endsection
 
 @push('scripts')
 <script>
@@ -334,3 +321,6 @@
     });
 </script>
 @endpush
+
+</x-project.layouts.admin>
+@endsection

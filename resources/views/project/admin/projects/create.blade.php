@@ -290,3 +290,4 @@
 </script>
 
 </x-project.layouts.admin>
+@endsection

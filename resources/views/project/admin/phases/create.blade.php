@@ -1,8 +1,17 @@
-@extends('components.project.layouts.admin')
+@extends('layouts.admin')
 
 @section('title', 'Nouvelle Phase')
 
 @section('content')
+<x-project.layouts.admin
+    title="Nouvelle Phase"
+    :breadcrumbs="[
+        ['label' => 'Tableau de bord', 'url' => route('dashboard')],
+        ['label' => 'Projets', 'url' => route('admin.projects.index')],
+        ['label' => $project->titre, 'url' => route('admin.projects.show', $project)],
+        ['label' => 'Nouvelle Phase', 'url' => null]
+    ]">
+
 <div class="container-fluid py-4">
     {{-- En-tête avec contexte du projet --}}
     <div class="mb-4">
@@ -56,7 +65,7 @@
         </div>
     </div>
 
-    <form action="{{ route('admin.project-phases.store') }}" method="POST" class="needs-validation" novalidate>
+    <form action="{{ route('admin.projects.phase.store', $project) }}" method="POST" class="needs-validation" novalidate>
         @csrf
         <input type="hidden" name="project_id" value="{{ $project->id }}">
 
@@ -267,7 +276,6 @@
         </div>
     </form>
 </div>
-@endsection
 
 @push('scripts')
 <script>
@@ -340,4 +348,6 @@
     document.getElementById('date_debut').addEventListener('change', updateDuration);
     document.getElementById('date_fin').addEventListener('change', updateDuration);
 </script>
-@endpush
+
+</x-project.layouts.admin>
+@endsection

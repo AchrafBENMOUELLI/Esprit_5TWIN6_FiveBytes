@@ -15,7 +15,21 @@
         ->paginate(10);
 @endphp
 
-<div class="container-fluid py-4">
+<style>
+    .aq-project-main {
+        margin-left: 240px;
+        padding: 88px 24px 24px;
+        min-height: 100vh;
+    }
+    @media (max-width: 991px) {
+        .aq-project-main {
+            margin-left: 0;
+            padding: 88px 16px 16px;
+        }
+    }
+</style>
+
+<div class="aq-project-main">
     {{-- Page Header --}}
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
@@ -334,3 +348,5 @@
         });
     });
 </script>
+
+</div>

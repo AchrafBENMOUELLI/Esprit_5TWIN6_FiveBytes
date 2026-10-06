@@ -1,8 +1,12 @@
-@extends('components.project.layouts.admin')
+<x-project.layouts.admin
+    title="Documents du Projet"
+    :breadcrumbs="[
+        ['label' => 'Tableau de bord', 'url' => route('dashboard')],
+        ['label' => 'Projets', 'url' => route('admin.projects.index')],
+        ['label' => $project->titre, 'url' => route('admin.projects.show', $project)],
+        ['label' => 'Documents', 'url' => null]
+    ]">
 
-@section('title', 'Documents du Projet')
-
-@section('content')
 <div class="container-fluid py-4">
     {{-- En-tête avec contexte du projet --}}
     <div class="mb-4">
@@ -21,7 +25,7 @@
                 <p class="text-muted">{{ $project->titre }}</p>
             </div>
             <div>
-                <a href="{{ route('admin.project-documents.create', ['project_id' => $project->id]) }}" 
+                <a href="{{ route('admin.projects.document.create', $project) }}" 
                    class="btn btn-info">
                     <i class="fas fa-upload me-2"></i>
                     Ajouter un document
@@ -132,23 +136,23 @@
         <div class="card-body">
             <div class="d-flex align-items-center gap-2 flex-wrap">
                 <span class="text-muted">Filtrer par type:</span>
-                <a href="{{ route('admin.project-documents.index', ['project_id' => $project->id]) }}" 
+                <a href="{{ route('admin.projects.document.index', $project) }}" 
                    class="btn btn-sm {{ !request('type') ? 'btn-info' : 'btn-outline-info' }}">
                     Tous
                 </a>
-                <a href="{{ route('admin.project-documents.index', ['project_id' => $project->id, 'type' => 'plan']) }}" 
+                <a href="{{ route('admin.projects.document.index', [$project, 'type' => 'plan']) }}" 
                    class="btn btn-sm {{ request('type') === 'plan' ? 'btn-primary' : 'btn-outline-primary' }}">
                     <i class="fas fa-drafting-compass me-1"></i> Plans
                 </a>
-                <a href="{{ route('admin.project-documents.index', ['project_id' => $project->id, 'type' => 'rapport']) }}" 
+                <a href="{{ route('admin.projects.document.index', [$project, 'type' => 'rapport']) }}" 
                    class="btn btn-sm {{ request('type') === 'rapport' ? 'btn-secondary' : 'btn-outline-secondary' }}">
                     <i class="fas fa-file-alt me-1"></i> Rapports
                 </a>
-                <a href="{{ route('admin.project-documents.index', ['project_id' => $project->id, 'type' => 'photo']) }}" 
+                <a href="{{ route('admin.projects.document.index', [$project, 'type' => 'photo']) }}" 
                    class="btn btn-sm {{ request('type') === 'photo' ? 'btn-success' : 'btn-outline-success' }}">
                     <i class="fas fa-camera me-1"></i> Photos
                 </a>
-                <a href="{{ route('admin.project-documents.index', ['project_id' => $project->id, 'type' => 'facture']) }}" 
+                <a href="{{ route('admin.projects.document.index', [$project, 'type' => 'facture']) }}" 
                    class="btn btn-sm {{ request('type') === 'facture' ? 'btn-warning' : 'btn-outline-warning' }}">
                     <i class="fas fa-file-invoice me-1"></i> Factures
                 </a>
@@ -237,7 +241,7 @@
                                     <i class="fas fa-download me-1"></i>
                                     Télécharger
                                 </a>
-                                <form action="{{ route('admin.project-documents.destroy', $document) }}" 
+                                <form action="{{ route('admin.documents.destroy', $document) }}" 
                                       method="POST"
                                       onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce document ?');">
                                     @csrf
@@ -261,7 +265,7 @@
                 <p class="text-muted mb-4">
                     {{ request('type') ? 'Aucun document de ce type.' : 'Ce projet n\'a pas encore de documents.' }}
                 </p>
-                <a href="{{ route('admin.project-documents.create', ['project_id' => $project->id]) }}" 
+                <a href="{{ route('admin.projects.document.create', $project) }}" 
                    class="btn btn-info">
                     <i class="fas fa-upload me-2"></i>
                     Ajouter le premier document
@@ -270,7 +274,6 @@
         </div>
     @endif
 </div>
-@endsection
 
 @push('styles')
 <style>
@@ -295,4 +298,6 @@
         return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
     }
 </script>
-@endpush
+
+</x-project.layouts.admin>
+@endsection

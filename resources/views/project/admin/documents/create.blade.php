@@ -1,8 +1,12 @@
-@extends('components.project.layouts.admin')
+<x-project.layouts.admin
+    title="Nouveau Document"
+    :breadcrumbs="[
+        ['label' => 'Tableau de bord', 'url' => route('dashboard')],
+        ['label' => 'Projets', 'url' => route('admin.projects.index')],
+        ['label' => $project->titre, 'url' => route('admin.projects.show', $project)],
+        ['label' => 'Nouveau Document', 'url' => null]
+    ]">
 
-@section('title', 'Nouveau Document')
-
-@section('content')
 <div class="container-fluid py-4">
     {{-- En-tête avec contexte du projet --}}
     <div class="mb-4">
@@ -43,7 +47,7 @@
         </div>
     </div>
 
-    <form action="{{ route('admin.project-documents.store') }}" 
+    <form action="{{ route('admin.projects.document.store', $project) }}" 
           method="POST" 
           enctype="multipart/form-data"
           class="needs-validation" 
@@ -273,7 +277,6 @@
         </div>
     </form>
 </div>
-@endsection
 
 @push('scripts')
 <script>
@@ -389,4 +392,11 @@
         border-color: #0dcaf0 !important;
     }
 </style>
-@endpush
+
+</x-project.layouts.admin>
+@endsection
+        border-color: #0dcaf0 !important;
+    }
+</style>
+
+</x-project.layouts.admin>

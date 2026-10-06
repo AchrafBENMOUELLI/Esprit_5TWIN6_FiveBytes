@@ -1,8 +1,16 @@
-@extends('components.project.layouts.admin')
+@extends('layouts.admin')
 
 @section('title', 'Nouveau Contractant')
 
 @section('content')
+<x-project.layouts.admin
+    title="Nouveau Contractant"
+    :breadcrumbs="[
+        ['label' => 'Tableau de bord', 'url' => route('dashboard')],
+        ['label' => 'Contractants', 'url' => route('admin.contractors.index')],
+        ['label' => 'Nouveau', 'url' => null]
+    ]">
+
 <div class="container-fluid py-4">
     {{-- En-tête --}}
     <div class="mb-4">
@@ -192,7 +200,6 @@
         </div>
     </form>
 </div>
-@endsection
 
 @push('scripts')
 <script>
@@ -233,3 +240,6 @@
     }
 </style>
 @endpush
+
+</x-project.layouts.admin>
+@endsection

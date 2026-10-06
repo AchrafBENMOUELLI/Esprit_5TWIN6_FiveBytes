@@ -1,8 +1,12 @@
-@extends('components.project.layouts.admin')
+<x-project.layouts.admin
+    title="Modifier Phase"
+    :breadcrumbs="[
+        ['label' => 'Tableau de bord', 'url' => route('dashboard')],
+        ['label' => 'Projets', 'url' => route('admin.projects.index')],
+        ['label' => $phase->project->titre, 'url' => route('admin.projects.show', $phase->project)],
+        ['label' => 'Modifier Phase', 'url' => null]
+    ]">
 
-@section('title', 'Modifier Phase')
-
-@section('content')
 <div class="container-fluid py-4">
     {{-- En-tête avec contexte du projet --}}
     <div class="mb-4">
@@ -56,7 +60,7 @@
         </div>
     </div>
 
-    <form action="{{ route('admin.project-phases.update', $phase) }}" method="POST" class="needs-validation" novalidate>
+    <form action="{{ route('admin.phases.update', $phase) }}" method="POST" class="needs-validation" novalidate>
         @csrf
         @method('PUT')
 
@@ -280,7 +284,6 @@
         </div>
     </form>
 </div>
-@endsection
 
 @push('scripts')
 <script>
@@ -349,4 +352,6 @@
         }
     });
 </script>
-@endpush
+
+</x-project.layouts.admin>
+@endsection
