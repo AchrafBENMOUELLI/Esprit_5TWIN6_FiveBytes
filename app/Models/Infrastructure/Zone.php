@@ -5,11 +5,14 @@ namespace App\Models\Infrastructure;
 use App\Models\Drought\Restriction;
 use App\Models\Drought\ScheduledCut;
 use App\Models\Drought\WaterLevel;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Zone extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'nom',
         'commune',

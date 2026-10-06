@@ -3,11 +3,14 @@
 namespace App\Models\Drought;
 
 use App\Models\Infrastructure\Zone;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WaterLevel extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'zone_id',
         'source',
