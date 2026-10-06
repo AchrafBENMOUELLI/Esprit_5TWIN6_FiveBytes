@@ -13,6 +13,10 @@ Route::get('/register', fn () => view('components.authentification.registercompo
     ->middleware('guest')
     ->name('register');
 
+Route::get('/drought', fn () => view('drought.index'))
+    ->middleware('auth')
+    ->name('drought');
+
 Route::get('/dashboard', function (Request $request) {
     if ($request->user()->role === UserRole::Citoyen) {
         return redirect('/');

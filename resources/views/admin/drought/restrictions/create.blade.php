@@ -1,19 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-<style>{!! file_get_contents(resource_path('views/components/drought/drought.css')) !!}</style>
-
-<div class="aq-drought-container" style="max-width: 600px;">
-    <div class="aq-drought-header">
-        <h1>Créer une Restriction</h1>
-    </div>
+<div class="aq-drought-container" style="max-width: 700px;">
+    <h1 style="color: var(--navy); margin-bottom: 2rem;">➕ Créer une Restriction</h1>
 
     <form method="POST" action="{{ route('admin.drought.restrictions.store') }}" class="aq-card">
         @csrf
 
         <div class="aq-form-group">
             <label for="titre">Titre *</label>
-            <input type="text" id="titre" name="titre" value="{{ old('titre') }}" required>
+            <input type="text" id="titre" name="titre" value="{{ old('titre') }}" required placeholder="Ex: Restriction d'été 2026">
             @error('titre')
                 <div class="aq-error">{{ $message }}</div>
             @enderror
@@ -37,9 +33,10 @@
         <div class="aq-form-group">
             <label for="niveau">Niveau *</label>
             <select id="niveau" name="niveau" required>
-                <option value="vigilance" {{ old('niveau') == 'vigilance' ? 'selected' : '' }}>Vigilance</option>
-                <option value="alerte" {{ old('niveau') == 'alerte' ? 'selected' : '' }}>Alerte</option>
-                <option value="crise" {{ old('niveau') == 'crise' ? 'selected' : '' }}>Crise</option>
+                <option value="">-- Sélectionner --</option>
+                <option value="vigilance" {{ old('niveau') == 'vigilance' ? 'selected' : '' }}>🟡 Vigilance</option>
+                <option value="alerte" {{ old('niveau') == 'alerte' ? 'selected' : '' }}>🟠 Alerte</option>
+                <option value="crise" {{ old('niveau') == 'crise' ? 'selected' : '' }}>🔴 Crise</option>
             </select>
             @error('niveau')
                 <div class="aq-error">{{ $message }}</div>
@@ -48,7 +45,7 @@
 
         <div class="aq-form-group">
             <label for="description">Description *</label>
-            <textarea id="description" name="description" required>{{ old('description') }}</textarea>
+            <textarea id="description" name="description" required placeholder="Décrivez la restriction...">{{ old('description') }}</textarea>
             @error('description')
                 <div class="aq-error">{{ $message }}</div>
             @enderror
@@ -63,16 +60,16 @@
         </div>
 
         <div class="aq-form-group">
-            <label for="date_fin">Date de Fin</label>
+            <label for="date_fin">Date de Fin (optionnel)</label>
             <input type="datetime-local" id="date_fin" name="date_fin" value="{{ old('date_fin') }}">
             @error('date_fin')
                 <div class="aq-error">{{ $message }}</div>
             @enderror
         </div>
 
-        <div style="display: flex; gap: 1rem;">
-            <button type="submit" class="aq-btn aq-btn-success">Créer</button>
-            <a href="{{ route('admin.drought.restrictions.index') }}" class="aq-btn aq-btn-secondary">Annuler</a>
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button type="submit" class="aq-btn aq-btn-success">✅ Créer</button>
+            <a href="{{ route('admin.drought.restrictions.index') }}" class="aq-btn aq-btn-secondary">← Annuler</a>
         </div>
     </form>
 </div>

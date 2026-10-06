@@ -1,12 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<style>{!! file_get_contents(resource_path('views/components/drought/drought.css')) !!}</style>
-
-<div class="aq-drought-container" style="max-width: 600px;">
-    <div class="aq-drought-header">
-        <h1>Éditer la Restriction</h1>
-    </div>
+<div class="aq-drought-container" style="max-width: 700px;">
+    <h1 style="color: var(--navy); margin-bottom: 2rem;">✏️ Éditer la Restriction</h1>
 
     <form method="POST" action="{{ route('admin.drought.restrictions.update', $restriction) }}" class="aq-card">
         @csrf
@@ -37,9 +33,9 @@
         <div class="aq-form-group">
             <label for="niveau">Niveau *</label>
             <select id="niveau" name="niveau" required>
-                <option value="vigilance" {{ old('niveau', $restriction->niveau) == 'vigilance' ? 'selected' : '' }}>Vigilance</option>
-                <option value="alerte" {{ old('niveau', $restriction->niveau) == 'alerte' ? 'selected' : '' }}>Alerte</option>
-                <option value="crise" {{ old('niveau', $restriction->niveau) == 'crise' ? 'selected' : '' }}>Crise</option>
+                <option value="vigilance" {{ old('niveau', $restriction->niveau) == 'vigilance' ? 'selected' : '' }}>🟡 Vigilance</option>
+                <option value="alerte" {{ old('niveau', $restriction->niveau) == 'alerte' ? 'selected' : '' }}>🟠 Alerte</option>
+                <option value="crise" {{ old('niveau', $restriction->niveau) == 'crise' ? 'selected' : '' }}>🔴 Crise</option>
             </select>
             @error('niveau')
                 <div class="aq-error">{{ $message }}</div>
@@ -63,16 +59,16 @@
         </div>
 
         <div class="aq-form-group">
-            <label for="date_fin">Date de Fin</label>
+            <label for="date_fin">Date de Fin (optionnel)</label>
             <input type="datetime-local" id="date_fin" name="date_fin" value="{{ old('date_fin', $restriction->date_fin ? $restriction->date_fin->format('Y-m-d H:i') : '') }}">
             @error('date_fin')
                 <div class="aq-error">{{ $message }}</div>
             @enderror
         </div>
 
-        <div style="display: flex; gap: 1rem;">
-            <button type="submit" class="aq-btn aq-btn-success">Mettre à jour</button>
-            <a href="{{ route('admin.drought.restrictions.index') }}" class="aq-btn aq-btn-secondary">Annuler</a>
+        <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+            <button type="submit" class="aq-btn aq-btn-success">💾 Mettre à jour</button>
+            <a href="{{ route('admin.drought.restrictions.index') }}" class="aq-btn aq-btn-secondary">← Annuler</a>
         </div>
     </form>
 </div>
