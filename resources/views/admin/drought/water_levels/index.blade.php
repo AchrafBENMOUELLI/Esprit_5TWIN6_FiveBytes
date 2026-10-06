@@ -13,9 +13,12 @@
         <div class="aq-alert aq-alert-success">{{ $message }}</div>
     @endif
 
-    <a href="{{ route('admin.drought.water-levels.create') }}" class="aq-btn aq-btn-primary" style="margin-bottom: 1.5rem;">
-        + Enregistrer un niveau
-    </a>
+    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+        <a href="{{ route('admin.drought.water-levels.create') }}" class="aq-btn aq-btn-primary">
+            + Enregistrer un niveau
+        </a>
+        <a href="{{ route('drought.test') }}" class="aq-btn aq-btn-secondary">← Retour</a>
+    </div>
 
     @if($waterLevels->count())
         <table class="aq-table">
@@ -59,5 +62,9 @@
             <p style="text-align: center; color: var(--muted);">Aucun niveau d'eau enregistré.</p>
         </div>
     @endif
+
+    <div style="margin-top: 2rem;">
+        <a href="{{ route('drought.test') }}" class="aq-btn aq-btn-secondary">← Retour</a>
+    </div>
 </div>
 @endsection
