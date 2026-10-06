@@ -3,21 +3,35 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Enums\UserRole;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // Admin
         User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+            'name'     => 'mariem',
+            'email'    => 'mariem@aquasecure.dz',
+            'password' => Hash::make('password'),
+            'role'     => UserRole::Admin,
+        ]);
+
+        // Technicien
+        User::factory()->create([
+            'name'     => 'Karim Benali',
+            'email'    => 'karim@aquasecure.dz',
+            'password' => Hash::make('password'),
+            'role'     => UserRole::Gestionnaire,
+        ]);
+
+        // Données infrastructure (ordre important : zones → infras → maintenances)
+        $this->call([
+            ZoneSeeder::class,
+            InfrastructureSeeder::class,
+            MaintenanceSeeder::class,
         ]);
     }
 }

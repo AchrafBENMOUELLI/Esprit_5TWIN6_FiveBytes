@@ -1,0 +1,14 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Infrastructure\Zone;
+use Illuminate\Database\Seeder;
+
+class ZoneSeeder extends Seeder
+{
+    public function run(): void
+    {
+        Zone::factory()->count(10)->create();
+    }
+}

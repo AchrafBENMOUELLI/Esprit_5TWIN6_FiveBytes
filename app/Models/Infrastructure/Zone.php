@@ -2,12 +2,19 @@
 
 namespace App\Models\Infrastructure;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Models\Infrastructure\Infrastructure;
 
 class Zone extends Model
 {
+    use HasFactory;
+
+    protected static function newFactory()
+    {
+        return \Database\Factories\Infrastructure\ZoneFactory::new();
+    }
     protected $fillable = [
         'nom',
         'commune',
