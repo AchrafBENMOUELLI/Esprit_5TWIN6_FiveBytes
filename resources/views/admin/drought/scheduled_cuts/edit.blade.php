@@ -42,7 +42,7 @@
 
         <div class="aq-form-group">
             <label for="debut">Début *</label>
-            <input type="datetime-local" id="debut" name="debut" value="{{ old('debut', $cut->debut->format('Y-m-d H:i')) }}" required>
+            <input type="datetime-local" id="debut" name="debut" value="{{ old('debut', $cut->debut->format('Y-m-d\TH:i')) }}" required>
             @error('debut')
                 <div class="aq-error">{{ $message }}</div>
             @enderror
@@ -50,7 +50,7 @@
 
         <div class="aq-form-group">
             <label for="fin">Fin *</label>
-            <input type="datetime-local" id="fin" name="fin" value="{{ old('fin', $cut->fin->format('Y-m-d H:i')) }}" required>
+            <input type="datetime-local" id="fin" name="fin" value="{{ old('fin', $cut->fin->format('Y-m-d\TH:i')) }}" required>
             @error('fin')
                 <div class="aq-error">{{ $message }}</div>
             @enderror

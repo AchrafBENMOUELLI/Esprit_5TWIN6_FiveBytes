@@ -169,8 +169,8 @@ class DroughtController extends Controller
         $validated = $request->validate([
             'restriction_id' => 'required|exists:restrictions,id',
             'zone_id' => 'required|exists:zones,id',
-            'debut' => 'required|date_format:Y-m-d H:i',
-            'fin' => 'required|date_format:Y-m-d H:i|after:debut',
+            'debut' => 'required|date_format:Y-m-d\TH:i',
+            'fin' => 'required|date_format:Y-m-d\TH:i|after:debut',
             'motif' => 'nullable|string|max:500',
         ]);
 
@@ -196,8 +196,8 @@ class DroughtController extends Controller
         $validated = $request->validate([
             'restriction_id' => 'required|exists:restrictions,id',
             'zone_id' => 'required|exists:zones,id',
-            'debut' => 'required|date_format:Y-m-d H:i',
-            'fin' => 'required|date_format:Y-m-d H:i|after:debut',
+            'debut' => 'required|date_format:Y-m-d\TH:i',
+            'fin' => 'required|date_format:Y-m-d\TH:i|after:debut',
             'motif' => 'nullable|string|max:500',
         ]);
 
