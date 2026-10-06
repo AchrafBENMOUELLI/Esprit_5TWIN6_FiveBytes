@@ -10,7 +10,7 @@
         <div style="margin-top: 2rem;">
             <h2 style="color: var(--navy);">🌊 Testez la Gestion 4</h2>
             <p>Accédez à la gestion complète des restrictions d'eau, niveaux d'eau et consommation.</p>
-            <a href="{{ route('drought') }}" style="
+            <a href="{{ route('drought.test') }}" style="
                 display: inline-block;
                 padding: 0.75rem 1.5rem;
                 background-color: var(--ocean);
