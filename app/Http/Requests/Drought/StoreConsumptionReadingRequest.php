@@ -17,8 +17,8 @@ class StoreConsumptionReadingRequest extends FormRequest
         return [
             'zone_id' => 'required|exists:zones,id',
             'volume_m3' => 'required|numeric|min:0',
-            'periode_debut' => 'required|date_format:Y-m-d H:i',
-            'periode_fin' => 'required|date_format:Y-m-d H:i|after:periode_debut',
+            'periode_debut' => 'required|date_format:Y-m-d\TH:i',
+            'periode_fin' => 'required|date_format:Y-m-d\TH:i|after:periode_debut',
             'prevision_ia' => 'nullable|string|max:500',
         ];
     }

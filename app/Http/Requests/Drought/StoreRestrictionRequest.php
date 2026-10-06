@@ -18,8 +18,8 @@ class StoreRestrictionRequest extends FormRequest
             'titre' => 'required|string|max:255',
             'niveau' => 'required|in:vigilance,alerte,crise',
             'description' => 'required|string|max:1000',
-            'date_debut' => 'required|date_format:Y-m-d H:i|after_or_equal:now',
-            'date_fin' => 'nullable|date_format:Y-m-d H:i|after:date_debut',
+            'date_debut' => 'required|date_format:Y-m-d\TH:i|after_or_equal:now',
+            'date_fin' => 'nullable|date_format:Y-m-d\TH:i|after:date_debut',
             'zone_id' => 'required|exists:zones,id',
         ];
     }
