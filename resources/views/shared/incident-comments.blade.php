@@ -159,9 +159,6 @@
                         <textarea name="contenu" 
                                   id="contenu" 
                                   rows="4" 
-                                  required
-                                  minlength="3"
-                                  maxlength="2000"
                                   placeholder="Écrivez votre commentaire ici..."
                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('contenu') border-red-500 @enderror">{{ old('contenu') }}</textarea>
                         <p class="mt-1 text-xs text-gray-500">Minimum 3 caractères, maximum 2000 caractères</p>

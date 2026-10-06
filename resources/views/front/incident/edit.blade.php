@@ -70,7 +70,6 @@
                             </label>
                             <select name="type" 
                                     id="type" 
-                                    required
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('type') border-red-500 @enderror">
                                 <option value="">Sélectionnez un type</option>
                                 @foreach($types as $type)
@@ -91,7 +90,6 @@
                             </label>
                             <select name="urgence" 
                                     id="urgence" 
-                                    required
                                     class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('urgence') border-red-500 @enderror">
                                 <option value="">Sélectionnez l'urgence</option>
                                 @foreach($urgences as $urgence)
@@ -114,7 +112,6 @@
                         <textarea name="description" 
                                   id="description" 
                                   rows="4" 
-                                  required
                                   placeholder="Décrivez l'incident en détail (minimum 10 caractères)..."
                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('description') border-red-500 @enderror">{{ old('description', $incident->description) }}</textarea>
                         @error('description')
@@ -160,7 +157,6 @@
                                        step="0.0000001" 
                                        name="latitude" 
                                        id="latitude" 
-                                       required
                                        value="{{ old('latitude', $incident->latitude) }}"
                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('latitude') border-red-500 @enderror">
                                 @error('latitude')
@@ -175,7 +171,6 @@
                                        step="0.0000001" 
                                        name="longitude" 
                                        id="longitude" 
-                                       required
                                        value="{{ old('longitude', $incident->longitude) }}"
                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 @error('longitude') border-red-500 @enderror">
                                 @error('longitude')

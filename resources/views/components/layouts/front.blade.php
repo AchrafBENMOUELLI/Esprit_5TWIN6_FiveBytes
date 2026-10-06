@@ -7,6 +7,9 @@
 
     <title>{{ $title ?? 'Portail Citoyen' }} - {{ config('app.name', 'AquaSecure') }}</title>
 
+    <!-- Base CSS avec variables -->
+    <style>{!! file_get_contents(resource_path('views/base.css')) !!}</style>
+
     <!-- Tailwind CSS via CDN (pour composants spécifiques) -->
     <script src="https://cdn.tailwindcss.com"></script>
     

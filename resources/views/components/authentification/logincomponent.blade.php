@@ -11,13 +11,13 @@
 
         <div class="aq-field">
             <label for="email">Email</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus>
+            <input id="email" type="email" name="email" value="{{ old('email') }}" autofocus>
             @error('email') <span class="aq-error">{{ $message }}</span> @enderror
         </div>
 
         <div class="aq-field">
             <label for="password">Mot de passe</label>
-            <input id="password" type="password" name="password" required>
+            <input id="password" type="password" name="password">
             @error('password') <span class="aq-error">{{ $message }}</span> @enderror
         </div>
 

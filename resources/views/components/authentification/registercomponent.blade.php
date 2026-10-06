@@ -11,25 +11,25 @@
 
         <div class="aq-field">
             <label for="name">Nom complet</label>
-            <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus>
+            <input id="name" type="text" name="name" value="{{ old('name') }}" autofocus>
             @error('name') <span class="aq-error">{{ $message }}</span> @enderror
         </div>
 
         <div class="aq-field">
             <label for="email">Email</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required>
+            <input id="email" type="email" name="email" value="{{ old('email') }}">
             @error('email') <span class="aq-error">{{ $message }}</span> @enderror
         </div>
 
         <div class="aq-field">
             <label for="password">Mot de passe</label>
-            <input id="password" type="password" name="password" required>
+            <input id="password" type="password" name="password">
             @error('password') <span class="aq-error">{{ $message }}</span> @enderror
         </div>
 
         <div class="aq-field">
             <label for="password_confirmation">Confirmer le mot de passe</label>
-            <input id="password_confirmation" type="password" name="password_confirmation" required>
+            <input id="password_confirmation" type="password" name="password_confirmation">
         </div>
 
         <button type="submit" class="aq-submit">S'inscrire</button>
