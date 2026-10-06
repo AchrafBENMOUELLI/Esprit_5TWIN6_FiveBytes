@@ -13,10 +13,10 @@
         @if(auth()->check())
             <div class="aq-card" style="margin-bottom: 2rem; background: var(--bg);">
                 <h2>Bienvenue {{ auth()->user()->name }}</h2>
-                <p style="color: var(--muted);">Rôle: <strong>{{ ucfirst(auth()->user()->role) }}</strong></p>
+                <p style="color: var(--muted);">Rôle: <strong>{{ ucfirst(auth()->user()->role->value) }}</strong></p>
             </div>
 
-            @if(auth()->user()->role === 'gestionnaire' || auth()->user()->role === 'admin')
+            @if(auth()->user()->role->value === 'gestionnaire' || auth()->user()->role->value === 'admin')
                 <div class="aq-drought-admin-menu">
                     <h2 style="color: var(--navy); width: 100%; margin-bottom: 1rem;">📊 Interface Gestionnaire</h2>
                     
@@ -35,7 +35,7 @@
                 </div>
             @endif
 
-            @if(auth()->user()->role === 'citoyen')
+            @if(auth()->user()->role->value === 'citoyen')
                 <div class="aq-drought-citizen-menu">
                     <h2 style="color: var(--navy); width: 100%; margin-bottom: 1rem;">👥 Interface Citoyen</h2>
                     
