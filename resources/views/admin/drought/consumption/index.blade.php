@@ -9,10 +9,6 @@
         <p>Suivi de la consommation d'eau par zone</p>
     </div>
 
-    @if($message = session('success'))
-        <div class="aq-alert aq-alert-success">{{ $message }}</div>
-    @endif
-
     <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
         <a href="{{ route('admin.drought.consumption.create') }}" class="aq-btn aq-btn-primary">
             + Enregistrer une lecture
@@ -60,9 +56,5 @@
             <p style="text-align: center; color: var(--muted);">Aucune lecture enregistrée.</p>
         </div>
     @endif
-
-    <div style="margin-top: 2rem;">
-        <a href="{{ route('drought.test') }}" class="aq-btn aq-btn-secondary">← Retour</a>
-    </div>
 </div>
 @endsection
