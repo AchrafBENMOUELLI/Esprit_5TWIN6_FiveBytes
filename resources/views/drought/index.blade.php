@@ -6,63 +6,46 @@
 <main class="aq-main">
     <div class="aq-drought-container">
         <div class="aq-drought-header">
-            <h1>🌊 Gestion 4 - Sécheresse & Consommation d'Eau</h1>
-            <p>Surveillance des niveaux d'eau, consommation et restrictions</p>
+            <h1>🌊 Gestion 4 - Test CRUD</h1>
+            <p>Testez la gestion complète des restrictions d'eau</p>
         </div>
 
         @if(auth()->check())
             <div class="aq-card" style="margin-bottom: 2rem; background: var(--bg);">
                 <h2>Bienvenue {{ auth()->user()->name }}</h2>
-                <p style="color: var(--muted);">Rôle: <strong>{{ ucfirst(auth()->user()->role->value) }}</strong></p>
+                <p style="color: var(--muted);">Testez directement le CRUD ci-dessous :</p>
             </div>
 
-            @if(auth()->user()->role->value === 'gestionnaire' || auth()->user()->role->value === 'admin')
-                <div class="aq-drought-admin-menu">
-                    <h2 style="color: var(--navy); width: 100%; margin-bottom: 1rem;">📊 Interface Gestionnaire</h2>
-                    
-                    <a href="{{ route('admin.drought.restrictions.index') }}" class="aq-btn aq-btn-primary">
-                        📋 Gérer les Restrictions
-                    </a>
-                    <a href="{{ route('admin.drought.water-levels.index') }}" class="aq-btn aq-btn-info">
-                        💧 Niveaux d'Eau
-                    </a>
-                    <a href="{{ route('admin.drought.consumption.index') }}" class="aq-btn aq-btn-info">
-                        📊 Consommation d'Eau
-                    </a>
-                    <a href="{{ route('admin.drought.scheduled-cuts.index') }}" class="aq-btn aq-btn-warning">
-                        ✂️ Coupures Planifiées
-                    </a>
-                </div>
-            @endif
-
-            @if(auth()->user()->role->value === 'citoyen')
-                <div class="aq-drought-citizen-menu">
-                    <h2 style="color: var(--navy); width: 100%; margin-bottom: 1rem;">👥 Interface Citoyen</h2>
-                    
-                    <a href="{{ route('front.drought.dashboard') }}" class="aq-btn aq-btn-secondary">
-                        📊 Tableau de Bord
-                    </a>
-                    <a href="{{ route('front.drought.scheduled-cuts') }}" class="aq-btn aq-btn-secondary">
-                        📅 Calendrier des Coupures
-                    </a>
-                    <a href="{{ route('front.drought.subscriptions') }}" class="aq-btn aq-btn-secondary">
-                        🔔 Mes Alertes
-                    </a>
-                </div>
-            @endif
+            <div class="aq-drought-admin-menu">
+                <a href="{{ route('admin.drought.restrictions.index') }}" class="aq-btn aq-btn-primary">
+                    📋 TESTER : Restrictions (CRUD)
+                </a>
+                <a href="{{ route('admin.drought.water-levels.index') }}" class="aq-btn aq-btn-info">
+                    💧 TESTER : Niveaux d'Eau
+                </a>
+                <a href="{{ route('admin.drought.consumption.index') }}" class="aq-btn aq-btn-info">
+                    📊 TESTER : Consommation
+                </a>
+                <a href="{{ route('admin.drought.scheduled-cuts.index') }}" class="aq-btn aq-btn-warning">
+                    ✂️ TESTER : Coupures Planifiées
+                </a>
+            </div>
 
             <div class="aq-card" style="margin-top: 2rem; border-left: 4px solid var(--ocean);">
-                <h3>ℹ️ Information</h3>
-                <p>Cette section vous permet de gérer la sécheresse et la consommation d'eau.</p>
+                <h3>✨ Fonctionnalités à Tester</h3>
                 <ul style="margin-left: 1.5rem;">
-                    <li><strong>Gestionnaires</strong> : Créez des restrictions, enregistrez les niveaux d'eau et planifiez les coupures</li>
-                    <li><strong>Citoyens</strong> : Consultez les alertes, le calendrier des coupures et abonnez-vous aux notifications</li>
+                    <li><strong>Créer</strong> : Cliquez "+ Créer" pour ajouter une restriction</li>
+                    <li><strong>Lire</strong> : Les restrictions s'affichent dans la liste</li>
+                    <li><strong>Éditer</strong> : Cliquez "✏️ Éditer" pour modifier</li>
+                    <li><strong>Supprimer</strong> : Cliquez "🗑️ Supprimer" pour effacer</li>
+                    <li><strong>Validation</strong> : Laissez un champ vide pour voir les erreurs</li>
+                    <li><strong>old()</strong> : Les anciennes valeurs restent après une erreur</li>
                 </ul>
             </div>
         @else
             <div class="aq-card">
                 <h2>Connexion requise</h2>
-                <p>Veuillez vous <a href="{{ route('login') }}" style="color: var(--ocean);">connecter</a> pour accéder à la Gestion 4.</p>
+                <p>Veuillez vous <a href="{{ route('login') }}" style="color: var(--ocean);">connecter</a> pour accéder à Gestion 4.</p>
             </div>
         @endif
     </div>
